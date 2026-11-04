@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strings | Data Structures in C</title><style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#1f2a44;background:linear-gradient(180deg,#bcd3ec,#e9f0f8);min-height:100vh}
+nav{background:#5e161f;padding:14px 24px;display:flex;gap:34px}
+nav a{color:#fff;font-weight:bold;font-size:20px;text-decoration:none}
+nav a:hover{text-decoration:underline}
+header{background:#8a5a2e;text-align:center;color:#fff;padding:34px 12px 40px}
+header h1{margin:0 0 26px;font-size:48px}
+header h2{margin:0;font-size:36px}
+.back{display:inline-block;margin:14px 24px;color:#1a4fb4;font-size:22px}
+.card{max-width:1100px;margin:10px auto 40px;background:rgba(255,255,255,.92);border-radius:16px;padding:26px 30px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.card>h2{color:#b08560;font-size:34px;margin:0 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.chips a{background:#8a5a2e;color:#fff;text-decoration:none;border-radius:8px;padding:5px 11px;font-size:14px;font-weight:bold}
+.chips a:hover{background:#5e161f}
+.q{padding:18px 0 8px;border-top:1px solid #e3d6c8;scroll-margin-top:10px}
+.qtext{font-size:21px;font-weight:bold;color:#20305a;margin:6px 0 14px;line-height:1.4}
+h3{margin:14px 0 8px;font-size:22px;color:#222}
+pre{margin:0;border-radius:12px;padding:18px 20px;overflow:auto;font-family:Consolas,Menlo,monospace;font-size:15px;line-height:1.5;tab-size:4}
+pre.code{background:#6f7f69;color:#f4f4e8}
+pre.out{background:#7d8a89;color:#fff;max-height:460px}
+.in{color:#ffe38a;font-weight:bold}
+.wrap{position:relative}
+.copy{position:absolute;top:8px;right:10px;background:rgba(255,255,255,.85);color:#333;border:0;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:13px}
+.note{font-size:13px;color:#555;margin:6px 2px 0}
+footer{text-align:center;padding:26px;color:#fff;background:#5e161f}
+/* home */
+body.home{background:linear-gradient(180deg,#8d4b22 0%,#c19a8e 70%,#b88f84 100%);color:#fff}
+.home h1{text-align:center;font-size:46px;margin:44px 12px 50px}
+.grid{max-width:1150px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px}
+.box{display:block;background:#f6efe9;color:#c4873f;text-decoration:none;text-align:center;font-weight:bold;font-size:22px;padding:30px 12px;border-radius:14px;box-shadow:0 5px 14px rgba(0,0,0,.2);transition:transform .2s,box-shadow .2s,background .2s,color .2s}
+.box small{display:block;margin-top:8px;font-size:14px;font-weight:normal;color:#9b7a55}
+.box:hover{transform:translateY(-6px) scale(1.04);background:#fff;color:#7a3a14;box-shadow:0 12px 26px rgba(0,0,0,.35)}
+.homefoot{text-align:center;margin:60px 0 40px;font-size:16px}
+.page{max-width:800px;margin:30px auto;background:rgba(255,255,255,.92);border-radius:16px;padding:26px 30px}
+@media(max-width:640px){header h1{font-size:30px}header h2{font-size:24px}.qtext{font-size:18px}nav{gap:18px}pre{font-size:13px}}
+</style></head>
+<body><nav><a href="index.html">home</a><a href="about.html">about</a><a href="contact.html">contact</a></nav>
+<header><h1>DATA STRUCTURES</h1><h2>Strings</h2></header>
+<a class="back" href="index.html">&larr; Back to Home</a>
+<div class="card"><h2>Strings Questions</h2>
+<div class="q" id="q1">
+<p class="qtext">1. Enter the string from user and convert in uppercase ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+int main()
+{
+    char s[1000];
+    int i;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    for (i = 0; s[i]; i++)
+        s[i] = toupper((unsigned char)s[i]);
+    printf(&quot;Uppercase: %s&quot;, s);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">hello World from C
+</span>Uppercase: HELLO WORLD FROM C</pre>
+</div>
+<div class="q" id="q2">
+<p class="qtext">2. Enter the string from user and convert in lowercase ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+int main()
+{
+    char s[1000];
+    int i;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    for (i = 0; s[i]; i++)
+        s[i] = tolower((unsigned char)s[i]);
+    printf(&quot;Lowercase: %s&quot;, s);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">HELLO World From C
+</span>Lowercase: hello world from c</pre>
+</div>
+<div class="q" id="q3">
+<p class="qtext">3. Enter the string from user and convert into sentence case ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+int main()
+{
+    char s[1000];
+    int i, cap = 1;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    for (i = 0; s[i]; i++)
+    {
+        if (isalpha((unsigned char)s[i]))
+        {
+            s[i] = cap ? toupper((unsigned char)s[i]) : tolower((unsigned char)s[i]);
+            cap = 0;
+        }
+        if (s[i] == &#x27;.&#x27; || s[i] == &#x27;!&#x27; || s[i] == &#x27;?&#x27;)
+            cap = 1;
+    }
+    printf(&quot;Sentence case: %s&quot;, s);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">hello world. this is c programming! how are you?
+</span>Sentence case: Hello world. This is c programming! How are you?</pre>
+</div>
+<div class="q" id="q4">
+<p class="qtext">4. Enter the string from user and convert into title case ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+int main()
+{
+    char s[1000];
+    int i, newWord = 1;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    for (i = 0; s[i]; i++)
+    {
+        if (isspace((unsigned char)s[i]))
+            newWord = 1;
+        else if (newWord)
+        {
+            s[i] = toupper((unsigned char)s[i]);
+            newWord = 0;
+        }
+        else
+            s[i] = tolower((unsigned char)s[i]);
+    }
+    printf(&quot;Title case: %s&quot;, s);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">welcome to data structures
+</span>Title case: Welcome To Data Structures</pre>
+</div>
+<div class="q" id="q5">
+<p class="qtext">5. Enter the string from user and convert into toggle case ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+int main()
+{
+    char s[1000];
+    int i;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    for (i = 0; s[i]; i++)
+    {
+        if (isupper((unsigned char)s[i]))
+            s[i] = tolower((unsigned char)s[i]);
+        else if (islower((unsigned char)s[i]))
+            s[i] = toupper((unsigned char)s[i]);
+    }
+    printf(&quot;Toggle case: %s&quot;, s);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">Hello World
+</span>Toggle case: hELLO wORLD</pre>
+</div>
+<div class="q" id="q6">
+<p class="qtext">6. Enter the string from user and final length of the string ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char s[1000];
+    int len = 0;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    s[strcspn(s, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    while (s[len] != &#x27;\0&#x27;)
+        len++;
+    printf(&quot;Length of the string: %d\n&quot;, len);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">Data Structures
+</span>Length of the string: 15</pre>
+</div>
+<div class="q" id="q7">
+<p class="qtext">7. Enter two strings from user and compare those strings that they are equal or not?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char a[1000], b[1000];
+    int i = 0;
+    printf(&quot;Enter first string: &quot;);
+    fgets(a, sizeof a, stdin);
+    a[strcspn(a, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    printf(&quot;Enter second string: &quot;);
+    fgets(b, sizeof b, stdin);
+    b[strcspn(b, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    while (a[i] != &#x27;\0&#x27; &amp;&amp; a[i] == b[i])
+        i++;
+    if (a[i] == b[i])
+        printf(&quot;The strings are equal\n&quot;);
+    else
+        printf(&quot;The strings are not equal\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter first string: <span class="in">apple
+</span>Enter second string: <span class="in">apple
+</span>The strings are equal</pre>
+</div>
+<div class="q" id="q8">
+<p class="qtext">8. Enter two strings from user and concatenate those strings in another string and display the answer?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char a[1000], b[1000], c[2000];
+    int i, j = 0;
+    printf(&quot;Enter first string: &quot;);
+    fgets(a, sizeof a, stdin);
+    a[strcspn(a, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    printf(&quot;Enter second string: &quot;);
+    fgets(b, sizeof b, stdin);
+    b[strcspn(b, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    for (i = 0; a[i] != &#x27;\0&#x27;; i++)
+        c[j++] = a[i];
+    for (i = 0; b[i] != &#x27;\0&#x27;; i++)
+        c[j++] = b[i];
+    c[j] = &#x27;\0&#x27;;
+    printf(&quot;Concatenated string: %s\n&quot;, c);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter first string: <span class="in">Data
+</span>Enter second string: <span class="in">Structures
+</span>Concatenated string: DataStructures</pre>
+</div>
+<div class="q" id="q9">
+<p class="qtext">9. Enter the string from user and copy it into another string variable?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char a[1000], b[1000];
+    int i;
+    printf(&quot;Enter a string: &quot;);
+    fgets(a, sizeof a, stdin);
+    a[strcspn(a, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    for (i = 0; a[i] != &#x27;\0&#x27;; i++)
+        b[i] = a[i];
+    b[i] = &#x27;\0&#x27;;
+    printf(&quot;Copied string: %s\n&quot;, b);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">Computer
+</span>Copied string: Computer</pre>
+</div>
+<div class="q" id="q10">
+<p class="qtext">10. Enter the string from user, enter the index number and print character present on that index ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char s[1000];
+    int idx;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    s[strcspn(s, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    printf(&quot;Enter index number: &quot;);
+    scanf(&quot;%d&quot;, &amp;idx);
+    if (idx &lt; 0 || idx &gt;= (int)strlen(s))
+        printf(&quot;Invalid index\n&quot;);
+    else
+        printf(&quot;Character at index %d: %c\n&quot;, idx, s[idx]);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">Programming
+</span>Enter index number: <span class="in">3
+</span>Character at index 3: g</pre>
+</div>
+<div class="q" id="q11">
+<p class="qtext">11. Enter the string from user and check its palindrome or not?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char s[1000];
+    int i, j, flag = 1;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    s[strcspn(s, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    for (i = 0, j = (int)strlen(s) - 1; i &lt; j; i++, j--)
+    {
+        if (s[i] != s[j])
+        {
+            flag = 0;
+            break;
+        }
+    }
+    if (flag)
+        printf(&quot;The string is a palindrome\n&quot;);
+    else
+        printf(&quot;The string is not a palindrome\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">madam
+</span>The string is a palindrome</pre>
+</div>
+<div class="q" id="q12">
+<p class="qtext">12. Enter the string from the user and print each character in new line ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char s[1000];
+    int i;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    s[strcspn(s, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    for (i = 0; s[i] != &#x27;\0&#x27;; i++)
+        printf(&quot;%c\n&quot;, s[i]);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">CODE
+</span>C
+O
+D
+E</pre>
+</div>
+<div class="q" id="q13">
+<p class="qtext">13. Enter the string from the user and copy reverse of the string into another string ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char a[1000], b[1000];
+    int i, n;
+    printf(&quot;Enter a string: &quot;);
+    fgets(a, sizeof a, stdin);
+    a[strcspn(a, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    n = (int)strlen(a);
+    for (i = 0; i &lt; n; i++)
+        b[i] = a[n - 1 - i];
+    b[n] = &#x27;\0&#x27;;
+    printf(&quot;Reversed string: %s\n&quot;, b);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">Hello
+</span>Reversed string: olleH</pre>
+</div>
+<div class="q" id="q14">
+<p class="qtext">14. Enter the string from the user and print the difference of ASCII value of each character ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char s[1000];
+    int i, n;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    s[strcspn(s, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    n = (int)strlen(s);
+    if (n &lt; 2)
+    {
+        printf(&quot;Enter at least two characters\n&quot;);
+        return 0;
+    }
+    for (i = 0; i &lt; n - 1; i++)
+        printf(&quot;&#x27;%c&#x27; and &#x27;%c&#x27;: %d - %d = %d\n&quot;, s[i], s[i + 1], s[i + 1], s[i], s[i + 1] - s[i]);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">ABCD
+</span>&#x27;A&#x27; and &#x27;B&#x27;: 66 - 65 = 1
+&#x27;B&#x27; and &#x27;C&#x27;: 67 - 66 = 1
+&#x27;C&#x27; and &#x27;D&#x27;: 68 - 67 = 1</pre>
+</div>
+<div class="q" id="q15">
+<p class="qtext">15. Enter the string from the user, enter a character also and search the character in the string?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char s[1000], ch;
+    int i, found = 0;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    s[strcspn(s, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    printf(&quot;Enter a character to search: &quot;);
+    scanf(&quot; %c&quot;, &amp;ch);
+    for (i = 0; s[i] != &#x27;\0&#x27;; i++)
+    {
+        if (s[i] == ch)
+        {
+            found = 1;
+            break;
+        }
+    }
+    if (found)
+        printf(&quot;Character &#x27;%c&#x27; is present in the string\n&quot;, ch);
+    else
+        printf(&quot;Character &#x27;%c&#x27; is not present in the string\n&quot;, ch);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">Programming
+</span>Enter a character to search: <span class="in">g
+</span>Character &#x27;g&#x27; is present in the string</pre>
+</div>
+<div class="q" id="q16">
+<p class="qtext">16. Enter the string from the user, also enter a character and print the index of the character if it is exist in the string else print -1.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char s[1000], ch;
+    int i, idx = -1;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    s[strcspn(s, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    printf(&quot;Enter a character: &quot;);
+    scanf(&quot; %c&quot;, &amp;ch);
+    for (i = 0; s[i] != &#x27;\0&#x27;; i++)
+    {
+        if (s[i] == ch)
+        {
+            idx = i;
+            break;
+        }
+    }
+    printf(&quot;Index: %d\n&quot;, idx);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">Programming
+</span>Enter a character: <span class="in">m
+</span>Index: 6</pre>
+</div>
+<div class="q" id="q17">
+<p class="qtext">17. Enter the string from the user, and count the number of vowels.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+int main()
+{
+    char s[1000];
+    int i, count = 0;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    for (i = 0; s[i]; i++)
+    {
+        switch (tolower((unsigned char)s[i]))
+        {
+            case &#x27;a&#x27;:
+            case &#x27;e&#x27;:
+            case &#x27;i&#x27;:
+            case &#x27;o&#x27;:
+            case &#x27;u&#x27;:
+                count++;
+        }
+    }
+    printf(&quot;Number of vowels: %d\n&quot;, count);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">Data Structures in C
+</span>Number of vowels: 6</pre>
+</div>
+<div class="q" id="q18">
+<p class="qtext">18. Enter the string from the user and convert into an integer value?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;ctype.h&gt;
+
+int main()
+{
+    char s[100];
+    int i = 0, sign = 1, num = 0;
+    printf(&quot;Enter a numeric string: &quot;);
+    fgets(s, sizeof s, stdin);
+    s[strcspn(s, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    while (isspace((unsigned char)s[i]))
+        i++;
+    if (s[i] == &#x27;-&#x27;)
+    {
+        sign = -1;
+        i++;
+    }
+    else if (s[i] == &#x27;+&#x27;)
+        i++;
+    while (isdigit((unsigned char)s[i]))
+    {
+        num = num * 10 + (s[i] - &#x27;0&#x27;);
+        i++;
+    }
+    printf(&quot;Integer value: %d\n&quot;, sign * num);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a numeric string: <span class="in">-1234
+</span>Integer value: -1234</pre>
+</div>
+<div class="q" id="q19">
+<p class="qtext">19. Enter the string from the user and convert into a float value?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;ctype.h&gt;
+
+int main()
+{
+    char s[100];
+    int i = 0, sign = 1;
+    double result = 0.0, frac = 0.1;
+    printf(&quot;Enter a numeric string: &quot;);
+    fgets(s, sizeof s, stdin);
+    s[strcspn(s, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    while (isspace((unsigned char)s[i]))
+        i++;
+    if (s[i] == &#x27;-&#x27;)
+    {
+        sign = -1;
+        i++;
+    }
+    else if (s[i] == &#x27;+&#x27;)
+        i++;
+    while (isdigit((unsigned char)s[i]))
+    {
+        result = result * 10 + (s[i] - &#x27;0&#x27;);
+        i++;
+    }
+    if (s[i] == &#x27;.&#x27;)
+    {
+        i++;
+        while (isdigit((unsigned char)s[i]))
+        {
+            result += (s[i] - &#x27;0&#x27;) * frac;
+            frac /= 10;
+            i++;
+        }
+    }
+    printf(&quot;Float value: %f\n&quot;, (float)(sign * result));
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a numeric string: <span class="in">45.75
+</span>Float value: 45.750000</pre>
+</div>
+<div class="q" id="q20">
+<p class="qtext">20. Enter the string from the user and count the number of characters, words, spaces and lines</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;ctype.h&gt;
+
+int main()
+{
+    char s[1000];
+    int i, chars = 0, words = 0, spaces = 0, lines = 0, inWord;
+    printf(&quot;Enter text (press Enter on an empty line to finish):\n&quot;);
+    while (fgets(s, sizeof s, stdin) != NULL)
+    {
+        s[strcspn(s, &quot;\n&quot;)] = &#x27;\0&#x27;;
+        if (s[0] == &#x27;\0&#x27;)
+            break;
+        lines++;
+        inWord = 0;
+        for (i = 0; s[i] != &#x27;\0&#x27;; i++)
+        {
+            chars++;
+            if (s[i] == &#x27; &#x27;)
+                spaces++;
+            if (isspace((unsigned char)s[i]))
+                inWord = 0;
+            else if (!inWord)
+            {
+                inWord = 1;
+                words++;
+            }
+        }
+    }
+    printf(&quot;Characters: %d\nWords: %d\nSpaces: %d\nLines: %d\n&quot;, chars, words, spaces, lines);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter text (press Enter on an empty line to finish):
+<span class="in">Hello World
+I love C programming
+
+</span>Characters: 31
+Words: 6
+Spaces: 4
+Lines: 2</pre>
+</div>
+<div class="q" id="q21">
+<p class="qtext">21. Print all the permutation of a string i.e. &quot;ABCDE&quot;.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+void swap(char *a, char *b)
+{
+    char t = *a;
+    *a = *b;
+    *b = t;
+}
+
+void permute(char *s, int l, int r)
+{
+    int i;
+    if (l == r)
+    {
+        printf(&quot;%s\n&quot;, s);
+        return;
+    }
+    for (i = l; i &lt;= r; i++)
+    {
+        swap(&amp;s[l], &amp;s[i]);
+        permute(s, l + 1, r);
+        swap(&amp;s[l], &amp;s[i]);
+    }
+}
+
+int main()
+{
+    char s[] = &quot;ABCDE&quot;;
+    permute(s, 0, (int)strlen(s) - 1);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">ABCDE
+ABCED
+ABDCE
+ABDEC
+ABEDC
+ABECD
+ACBDE
+ACBED
+ACDBE
+ACDEB
+ACEDB
+ACEBD
+ADCBE
+ADCEB
+ADBCE
+ADBEC
+ADEBC
+ADECB
+AECDB
+AECBD
+AEDCB
+AEDBC
+AEBDC
+AEBCD
+BACDE
+BACED
+BADCE
+BADEC
+BAEDC
+BAECD
+BCADE
+BCAED
+BCDAE
+BCDEA
+BCEDA
+BCEAD
+BDCAE
+BDCEA
+BDACE
+BDAEC
+BDEAC
+BDECA
+BECDA
+BECAD
+BEDCA
+BEDAC
+BEADC
+BEACD
+CBADE
+CBAED
+CBDAE
+CBDEA
+CBEDA
+CBEAD
+CABDE
+CABED
+CADBE
+CADEB
+CAEDB
+CAEBD
+CDABE
+CDAEB
+CDBAE
+CDBEA
+CDEBA
+CDEAB
+CEADB
+CEABD
+CEDAB
+CEDBA
+CEBDA
+CEBAD
+DBCAE
+DBCEA
+DBACE
+DBAEC
+DBEAC
+DBECA
+DCBAE
+DCBEA
+DCABE
+DCAEB
+DCEAB
+DCEBA
+DACBE
+DACEB
+DABCE
+DABEC
+DAEBC
+DAECB
+DECAB
+DECBA
+DEACB
+DEABC
+DEBAC
+DEBCA
+EBCDA
+EBCAD
+EBDCA
+EBDAC
+EBADC
+EBACD
+ECBDA
+ECBAD
+ECDBA
+ECDAB
+ECADB
+ECABD
+EDCBA
+EDCAB
+EDBCA
+EDBAC
+EDABC
+EDACB
+EACDB
+EACBD
+EADCB
+EADBC
+EABDC
+EABCD</pre>
+</div>
+<div class="q" id="q22">
+<p class="qtext">22. Enter the string from the user, sort the string in ascending order and print it.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char s[1000], t;
+    int i, j, n;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    s[strcspn(s, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    n = (int)strlen(s);
+    for (i = 0; i &lt; n - 1; i++)
+    {
+        for (j = 0; j &lt; n - i - 1; j++)
+        {
+            if (s[j] &gt; s[j + 1])
+            {
+                t = s[j];
+                s[j] = s[j + 1];
+                s[j + 1] = t;
+            }
+        }
+    }
+    printf(&quot;Sorted string: %s\n&quot;, s);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">programming
+</span>Sorted string: aggimmnoprr</pre>
+</div>
+<div class="q" id="q23">
+<p class="qtext">23. Enter a sentence from user and then enter the word and count the occurence of that word in the sentence.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char sentence[1000], word[100], *tok;
+    int count = 0;
+    printf(&quot;Enter a sentence: &quot;);
+    fgets(sentence, sizeof sentence, stdin);
+    sentence[strcspn(sentence, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    printf(&quot;Enter the word to count: &quot;);
+    fgets(word, sizeof word, stdin);
+    word[strcspn(word, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    tok = strtok(sentence, &quot; \t&quot;);
+    while (tok != NULL)
+    {
+        if (strcmp(tok, word) == 0)
+            count++;
+        tok = strtok(NULL, &quot; \t&quot;);
+    }
+    printf(&quot;Occurrences of \&quot;%s\&quot;: %d\n&quot;, word, count);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a sentence: <span class="in">the cat and the dog and the bird
+</span>Enter the word to count: <span class="in">the
+</span>Occurrences of &quot;the&quot;: 3</pre>
+</div>
+<div class="q" id="q24">
+<p class="qtext">24. Enter a sentence from user and then enter the word and replace that word by another word.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char sentence[1000], oldW[100], newW[100], result[3000];
+    char *p, *cur;
+    int oldLen;
+    printf(&quot;Enter a sentence: &quot;);
+    fgets(sentence, sizeof sentence, stdin);
+    sentence[strcspn(sentence, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    printf(&quot;Enter the word to replace: &quot;);
+    fgets(oldW, sizeof oldW, stdin);
+    oldW[strcspn(oldW, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    printf(&quot;Enter the new word: &quot;);
+    fgets(newW, sizeof newW, stdin);
+    newW[strcspn(newW, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    oldLen = (int)strlen(oldW);
+    if (oldLen == 0)
+    {
+        printf(&quot;Word to replace cannot be empty\n&quot;);
+        return 0;
+    }
+    result[0] = &#x27;\0&#x27;;
+    cur = sentence;
+    while ((p = strstr(cur, oldW)) != NULL)
+    {
+        strncat(result, cur, p - cur);
+        strcat(result, newW);
+        cur = p + oldLen;
+    }
+    strcat(result, cur);
+    printf(&quot;Result: %s\n&quot;, result);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a sentence: <span class="in">I like apples and apples are good
+</span>Enter the word to replace: <span class="in">apples
+</span>Enter the new word: <span class="in">mangoes
+</span>Result: I like mangoes and mangoes are good</pre>
+</div>
+<div class="q" id="q25">
+<p class="qtext">25. Enter the string from the user and trim/ eliminate the spaces from both ends (if any).</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;ctype.h&gt;
+
+int main()
+{
+    char s[1000];
+    int start = 0, end, i;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    s[strcspn(s, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    end = (int)strlen(s) - 1;
+    while (s[start] != &#x27;\0&#x27; &amp;&amp; isspace((unsigned char)s[start]))
+        start++;
+    while (end &gt;= start &amp;&amp; isspace((unsigned char)s[end]))
+        end--;
+    for (i = 0; start + i &lt;= end; i++)
+        s[i] = s[start + i];
+    s[i] = &#x27;\0&#x27;;
+    printf(&quot;Trimmed string: [%s]\n&quot;, s);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">   hello world   
+</span>Trimmed string: [hello world]</pre>
+</div>
+<div class="q" id="q26">
+<p class="qtext">26. Enter the string from user and splits the first word and second word and return the start index of the second word.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;ctype.h&gt;
+
+int main()
+{
+    char s[1000], first[500], second[500];
+    int i = 0, j, k, startSecond = -1;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    s[strcspn(s, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    while (isspace((unsigned char)s[i]))
+        i++;
+    j = 0;
+    while (s[i] != &#x27;\0&#x27; &amp;&amp; !isspace((unsigned char)s[i]))
+        first[j++] = s[i++];
+    first[j] = &#x27;\0&#x27;;
+    while (isspace((unsigned char)s[i]))
+        i++;
+    if (s[i] != &#x27;\0&#x27;)
+    {
+        startSecond = i;
+        k = 0;
+        while (s[i] != &#x27;\0&#x27; &amp;&amp; !isspace((unsigned char)s[i]))
+            second[k++] = s[i++];
+        second[k] = &#x27;\0&#x27;;
+    }
+    else
+        second[0] = &#x27;\0&#x27;;
+    printf(&quot;First word: %s\n&quot;, first);
+    printf(&quot;Second word: %s\n&quot;, second);
+    printf(&quot;Start index of second word: %d\n&quot;, startSecond);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">Hello Beautiful World
+</span>First word: Hello
+Second word: Beautiful
+Start index of second word: 6</pre>
+</div>
+<div class="q" id="q27">
+<p class="qtext">27. Display the string on the output screen but ask the text alignment option given by the user (1 for left, 2 for center, 3 right)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char s[1000];
+    int choice, width = 80, len;
+    printf(&quot;Enter a string: &quot;);
+    fgets(s, sizeof s, stdin);
+    s[strcspn(s, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    printf(&quot;Enter alignment (1 for Left, 2 for Center, 3 for Right): &quot;);
+    scanf(&quot;%d&quot;, &amp;choice);
+    len = (int)strlen(s);
+    if (len &gt; width)
+        width = len;
+    switch (choice)
+    {
+        case 1:
+            printf(&quot;%s\n&quot;, s);
+            break;
+        case 2:
+            printf(&quot;%*s\n&quot;, (width + len) / 2, s);
+            break;
+        case 3:
+            printf(&quot;%*s\n&quot;, width, s);
+            break;
+        default:
+            printf(&quot;Invalid option\n&quot;);
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string: <span class="in">DataStructures
+</span>Enter alignment (1 for Left, 2 for Center, 3 for Right): <span class="in">2
+</span>                                 DataStructures</pre>
+</div>
+<div class="q" id="q28">
+<p class="qtext">28. Create a dictionary having 10 words and their meaning with following operations. [create, delete, search].</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+struct node
+{
+    char word[50];
+    char meaning[200];
+    struct node *next;
+};
+
+struct node *head = NULL;
+
+void addWord()
+{
+    struct node *newnode;
+    struct node *cur;
+    newnode = (struct node *)malloc(sizeof(struct node));
+    if (newnode == NULL)
+    {
+        printf(&quot;\nMemory allocation failed.\n&quot;);
+        return;
+    }
+    printf(&quot;\nEnter word: &quot;);
+    scanf(&quot; %49[^\n]&quot;, newnode-&gt;word);
+    printf(&quot;Enter meaning: &quot;);
+    scanf(&quot; %199[^\n]&quot;, newnode-&gt;meaning);
+    newnode-&gt;next = NULL;
+    /* Check duplicate word */
+    cur = head;
+    while (cur != NULL)
+    {
+        if (strcmp(cur-&gt;word, newnode-&gt;word) == 0)
+        {
+            printf(&quot;\nWord already exists.\n&quot;);
+            free(newnode);
+            return;
+        }
+        cur = cur-&gt;next;
+    }
+    /* First node */
+    if (head == NULL)
+    {
+        head = newnode;
+    }
+    else
+    {
+        cur = head;
+        while (cur-&gt;next != NULL)
+        {
+            cur = cur-&gt;next;
+        }
+        cur-&gt;next = newnode;
+    }
+    printf(&quot;\nWord added successfully.\n&quot;);
+}
+
+void searchWord()
+{
+    char word[50];
+    struct node *cur = head;
+    printf(&quot;\nEnter word to search: &quot;);
+    scanf(&quot; %49[^\n]&quot;, word);
+    while (cur != NULL)
+    {
+        if (strcmp(cur-&gt;word, word) == 0)
+        {
+            printf(&quot;\nWord    : %s\n&quot;, cur-&gt;word);
+            printf(&quot;Meaning : %s\n&quot;, cur-&gt;meaning);
+            return;
+        }
+        cur = cur-&gt;next;
+    }
+    printf(&quot;\nWord not found.\n&quot;);
+}
+
+void editWord()
+{
+    char word[50];
+    struct node *cur = head;
+    printf(&quot;\nEnter word to edit: &quot;);
+    scanf(&quot; %49[^\n]&quot;, word);
+    while (cur != NULL)
+    {
+        if (strcmp(cur-&gt;word, word) == 0)
+        {
+            printf(&quot;\nCurrent word    : %s\n&quot;, cur-&gt;word);
+            printf(&quot;Current meaning : %s\n&quot;, cur-&gt;meaning);
+            printf(&quot;\nEnter new word: &quot;);
+            scanf(&quot; %49[^\n]&quot;, cur-&gt;word);
+            printf(&quot;Enter new meaning: &quot;);
+            scanf(&quot; %199[^\n]&quot;, cur-&gt;meaning);
+            printf(&quot;\nWord edited successfully.\n&quot;);
+            return;
+        }
+        cur = cur-&gt;next;
+    }
+    printf(&quot;\nWord not found.\n&quot;);
+}
+
+void deleteWord()
+{
+    char word[50];
+    struct node *cur = head;
+    struct node *prev = NULL;
+    printf(&quot;\nEnter word to remove: &quot;);
+    scanf(&quot; %49[^\n]&quot;, word);
+    if (head == NULL)
+    {
+        printf(&quot;\nDictionary is empty.\n&quot;);
+        return;
+    }
+    while (cur != NULL)
+    {
+        if (strcmp(cur-&gt;word, word) == 0)
+        {
+            if (cur == head)
+            {
+                head = head-&gt;next;
+            }
+            else
+            {
+                prev-&gt;next = cur-&gt;next;
+            }
+            free(cur);
+            printf(&quot;\nWord removed successfully.\n&quot;);
+            return;
+        }
+        prev = cur;
+        cur = cur-&gt;next;
+    }
+    printf(&quot;\nWord not found.\n&quot;);
+}
+
+void displayWords()
+{
+    struct node *cur = head;
+    if (head == NULL)
+    {
+        printf(&quot;\nDictionary is empty.\n&quot;);
+        return;
+    }
+    printf(&quot;\n========== DICTIONARY ==========\n&quot;);
+    while (cur != NULL)
+    {
+        printf(&quot;\nWord    : %s\n&quot;, cur-&gt;word);
+        printf(&quot;Meaning : %s\n&quot;, cur-&gt;meaning);
+        printf(&quot;--------------------------------\n&quot;);
+        cur = cur-&gt;next;
+    }
+}
+
+void adminMenu()
+{
+    int choice;
+    do
+    {
+        printf(&quot;\n\n========== ADMIN MENU ==========\n&quot;);
+        printf(&quot;1. Add Word\n&quot;);
+        printf(&quot;2. Edit Word\n&quot;);
+        printf(&quot;3. Remove Word\n&quot;);
+        printf(&quot;4. Search Word\n&quot;);
+        printf(&quot;5. Display All Words\n&quot;);
+        printf(&quot;6. Logout\n&quot;);
+        printf(&quot;\nEnter choice: &quot;);
+        scanf(&quot;%d&quot;, &amp;choice);
+        switch (choice)
+        {
+            case 1:
+                addWord();
+                break;
+            case 2:
+                editWord();
+                break;
+            case 3:
+                deleteWord();
+                break;
+            case 4:
+                searchWord();
+                break;
+            case 5:
+                displayWords();
+                break;
+            case 6:
+                printf(&quot;\nAdmin logged out.\n&quot;);
+                break;
+            default:
+                printf(&quot;\nInvalid choice.\n&quot;);
+        }
+    } while (choice != 6);
+}
+
+void userMenu()
+{
+    int choice;
+    do
+    {
+        printf(&quot;\n\n========== USER MENU ==========\n&quot;);
+        printf(&quot;1. Search Word\n&quot;);
+        printf(&quot;2. Logout\n&quot;);
+        printf(&quot;\nEnter choice: &quot;);
+        scanf(&quot;%d&quot;, &amp;choice);
+        switch (choice)
+        {
+            case 1:
+                searchWord();
+                break;
+            case 2:
+                printf(&quot;\nUser logged out.\n&quot;);
+                break;
+            default:
+                printf(&quot;\nInvalid choice.\n&quot;);
+        }
+    } while (choice != 2);
+}
+
+void login()
+{
+    char id[30];
+    char password[30];
+    printf(&quot;\n========== DICTIONARY LOGIN ==========\n&quot;);
+    printf(&quot;Enter User ID: &quot;);
+    scanf(&quot;%29s&quot;, id);
+    printf(&quot;Enter Password: &quot;);
+    scanf(&quot;%29s&quot;, password);
+    if (strcmp(id, &quot;admin&quot;) == 0 &amp;&amp; strcmp(password, &quot;admin123&quot;) == 0)
+    {
+        printf(&quot;\nAdmin login successful.\n&quot;);
+        adminMenu();
+    }
+    else if (strcmp(id, &quot;user&quot;) == 0 &amp;&amp; strcmp(password, &quot;user123&quot;) == 0)
+    {
+        printf(&quot;\nUser login successful.\n&quot;);
+        userMenu();
+    }
+    else
+    {
+        printf(&quot;\nInvalid User ID or Password.\n&quot;);
+    }
+}
+
+void freeDictionary()
+{
+    struct node *cur;
+    while (head != NULL)
+    {
+        cur = head;
+        head = head-&gt;next;
+        free(cur);
+    }
+}
+
+int main()
+{
+    int choice;
+    do
+    {
+        printf(&quot;\n\n====================================\n&quot;);
+        printf(&quot;   DICTIONARY\n&quot;);
+        printf(&quot;====================================\n&quot;);
+        printf(&quot;1. Login\n&quot;);
+        printf(&quot;2. Exit\n&quot;);
+        printf(&quot;\nEnter choice: &quot;);
+        scanf(&quot;%d&quot;, &amp;choice);
+        switch (choice)
+        {
+            case 1:
+                login();
+                break;
+            case 2:
+                printf(&quot;\nExiting Dictionary...\n&quot;);
+                break;
+            default:
+                printf(&quot;\nInvalid choice.\n&quot;);
+        }
+    } while (choice != 2);
+    freeDictionary();
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">
+
+====================================
+   DICTIONARY
+====================================
+1. Login
+2. Exit
+
+Enter choice: <span class="in">1
+</span>
+========== DICTIONARY LOGIN ==========
+Enter User ID: <span class="in">admin
+</span>Enter Password: <span class="in">admin123
+</span>
+Admin login successful.
+
+
+========== ADMIN MENU ==========
+1. Add Word
+2. Edit Word
+3. Remove Word
+4. Search Word
+5. Display All Words
+6. Logout
+
+Enter choice: <span class="in">1
+</span>
+Enter word: <span class="in">Array
+</span>Enter meaning: <span class="in">A collection of similar data items
+</span>
+Word added successfully.
+
+
+========== ADMIN MENU ==========
+1. Add Word
+2. Edit Word
+3. Remove Word
+4. Search Word
+5. Display All Words
+6. Logout
+
+Enter choice: <span class="in">1
+</span>
+Enter word: <span class="in">Stack
+</span>Enter meaning: <span class="in">A LIFO data structure
+</span>
+Word added successfully.
+
+
+========== ADMIN MENU ==========
+1. Add Word
+2. Edit Word
+3. Remove Word
+4. Search Word
+5. Display All Words
+6. Logout
+
+Enter choice: <span class="in">1
+</span>
+Enter word: <span class="in">Queue
+</span>Enter meaning: <span class="in">A FIFO data structure
+</span>
+Word added successfully.
+
+
+========== ADMIN MENU ==========
+1. Add Word
+2. Edit Word
+3. Remove Word
+4. Search Word
+5. Display All Words
+6. Logout
+
+Enter choice: <span class="in">5
+</span>
+========== DICTIONARY ==========
+
+Word    : Array
+Meaning : A collection of similar data items
+--------------------------------
+
+Word    : Stack
+Meaning : A LIFO data structure
+--------------------------------
+
+Word    : Queue
+Meaning : A FIFO data structure
+--------------------------------
+
+
+========== ADMIN MENU ==========
+1. Add Word
+2. Edit Word
+3. Remove Word
+4. Search Word
+5. Display All Words
+6. Logout
+
+Enter choice: <span class="in">4
+</span>
+Enter word to search: <span class="in">Stack
+</span>
+Word    : Stack
+Meaning : A LIFO data structure
+
+
+========== ADMIN MENU ==========
+1. Add Word
+2. Edit Word
+3. Remove Word
+4. Search Word
+5. Display All Words
+6. Logout
+
+Enter choice: <span class="in">3
+</span>
+Enter word to remove: <span class="in">Queue
+</span>
+Word removed successfully.
+
+
+========== ADMIN MENU ==========
+1. Add Word
+2. Edit Word
+3. Remove Word
+4. Search Word
+5. Display All Words
+6. Logout
+
+Enter choice: <span class="in">5
+</span>
+========== DICTIONARY ==========
+
+Word    : Array
+Meaning : A collection of similar data items
+--------------------------------
+
+Word    : Stack
+Meaning : A LIFO data structure
+--------------------------------
+
+
+========== ADMIN MENU ==========
+1. Add Word
+2. Edit Word
+3. Remove Word
+4. Search Word
+5. Display All Words
+6. Logout
+
+Enter choice: <span class="in">6
+</span>
+Admin logged out.
+
+
+====================================
+   DICTIONARY
+====================================
+1. Login
+2. Exit
+
+Enter choice: <span class="in">1
+</span>
+========== DICTIONARY LOGIN ==========
+Enter User ID: <span class="in">user
+</span>Enter Password: <span class="in">user123
+</span>
+User login successful.
+
+
+========== USER MENU ==========
+1. Search Word
+2. Logout
+
+Enter choice: <span class="in">1
+</span>
+Enter word to search: <span class="in">Array
+</span>
+Word    : Array
+Meaning : A collection of similar data items
+
+
+========== USER MENU ==========
+1. Search Word
+2. Logout
+
+Enter choice: <span class="in">2
+</span>
+User logged out.
+
+
+====================================
+   DICTIONARY
+====================================
+1. Login
+2. Exit
+
+Enter choice: <span class="in">2
+</span>
+Exiting Dictionary...</pre>
+</div>
+<div class="q" id="q29">
+<p class="qtext">29. Enter the string from user and convert characters into their ASCII values in the integer array. [for example take 10 characters]</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char s[1000];
+    int arr[10], i, n;
+    printf(&quot;Enter a string (at least 10 characters): &quot;);
+    fgets(s, sizeof s, stdin);
+    s[strcspn(s, &quot;\n&quot;)] = &#x27;\0&#x27;;
+    n = (int)strlen(s);
+    if (n &gt; 10)
+        n = 10;
+    for (i = 0; i &lt; n; i++)
+        arr[i] = (int)s[i];
+    for (i = 0; i &lt; n; i++)
+        printf(&quot;%c = %d\n&quot;, s[i], arr[i]);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter a string (at least 10 characters): <span class="in">Programming
+</span>P = 80
+r = 114
+o = 111
+g = 103
+r = 114
+a = 97
+m = 109
+m = 109
+i = 105
+n = 110</pre>
+</div>
+</div>
+<footer>My Data Structures Website</footer>
+</body></html>

@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sorting Algorithms | Data Structures in C</title><style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#1f2a44;background:linear-gradient(180deg,#bcd3ec,#e9f0f8);min-height:100vh}
+nav{background:#5e161f;padding:14px 24px;display:flex;gap:34px}
+nav a{color:#fff;font-weight:bold;font-size:20px;text-decoration:none}
+nav a:hover{text-decoration:underline}
+header{background:#8a5a2e;text-align:center;color:#fff;padding:34px 12px 40px}
+header h1{margin:0 0 26px;font-size:48px}
+header h2{margin:0;font-size:36px}
+.back{display:inline-block;margin:14px 24px;color:#1a4fb4;font-size:22px}
+.card{max-width:1100px;margin:10px auto 40px;background:rgba(255,255,255,.92);border-radius:16px;padding:26px 30px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.card>h2{color:#b08560;font-size:34px;margin:0 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.chips a{background:#8a5a2e;color:#fff;text-decoration:none;border-radius:8px;padding:5px 11px;font-size:14px;font-weight:bold}
+.chips a:hover{background:#5e161f}
+.q{padding:18px 0 8px;border-top:1px solid #e3d6c8;scroll-margin-top:10px}
+.qtext{font-size:21px;font-weight:bold;color:#20305a;margin:6px 0 14px;line-height:1.4}
+h3{margin:14px 0 8px;font-size:22px;color:#222}
+pre{margin:0;border-radius:12px;padding:18px 20px;overflow:auto;font-family:Consolas,Menlo,monospace;font-size:15px;line-height:1.5;tab-size:4}
+pre.code{background:#6f7f69;color:#f4f4e8}
+pre.out{background:#7d8a89;color:#fff;max-height:460px}
+.in{color:#ffe38a;font-weight:bold}
+.wrap{position:relative}
+.copy{position:absolute;top:8px;right:10px;background:rgba(255,255,255,.85);color:#333;border:0;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:13px}
+.note{font-size:13px;color:#555;margin:6px 2px 0}
+footer{text-align:center;padding:26px;color:#fff;background:#5e161f}
+/* home */
+body.home{background:linear-gradient(180deg,#8d4b22 0%,#c19a8e 70%,#b88f84 100%);color:#fff}
+.home h1{text-align:center;font-size:46px;margin:44px 12px 50px}
+.grid{max-width:1150px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px}
+.box{display:block;background:#f6efe9;color:#c4873f;text-decoration:none;text-align:center;font-weight:bold;font-size:22px;padding:30px 12px;border-radius:14px;box-shadow:0 5px 14px rgba(0,0,0,.2);transition:transform .2s,box-shadow .2s,background .2s,color .2s}
+.box small{display:block;margin-top:8px;font-size:14px;font-weight:normal;color:#9b7a55}
+.box:hover{transform:translateY(-6px) scale(1.04);background:#fff;color:#7a3a14;box-shadow:0 12px 26px rgba(0,0,0,.35)}
+.homefoot{text-align:center;margin:60px 0 40px;font-size:16px}
+.page{max-width:800px;margin:30px auto;background:rgba(255,255,255,.92);border-radius:16px;padding:26px 30px}
+@media(max-width:640px){header h1{font-size:30px}header h2{font-size:24px}.qtext{font-size:18px}nav{gap:18px}pre{font-size:13px}}
+</style></head>
+<body><nav><a href="index.html">home</a><a href="about.html">about</a><a href="contact.html">contact</a></nav>
+<header><h1>DATA STRUCTURES</h1><h2>Sorting Algorithms</h2></header>
+<a class="back" href="index.html">&larr; Back to Home</a>
+<div class="card"><h2>Sorting Algorithms Questions</h2>
+<div class="q" id="q1">
+<p class="qtext">1. Enter a integer array from the user and perform selection sort algorithm through iteration. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+void printArray(int a[], int n)
+{
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\n&quot;);
+}
+
+int main(void)
+{
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    int *a = malloc(n * sizeof(int));
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    for (int i = 0; i &lt; n - 1; i++)
+    {
+        int min = i;
+        for (int j = i + 1; j &lt; n; j++)
+            if (a[j] &lt; a[min])
+                min = j;
+        int t = a[i];
+        a[i] = a[min];
+        a[min] = t;
+    }
+    printArray(a, n);
+    printf(&quot;Best time complexity: O(n^2)\nWorst time complexity: O(n^2)\n&quot;);
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">6
+64 34 25 12 22 11
+</span>11 12 22 25 34 64 
+Best time complexity: O(n^2)
+Worst time complexity: O(n^2)</pre>
+</div>
+<div class="q" id="q2">
+<p class="qtext">2. Enter a integer array from the user and perform selection sort algorithm through recursion. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+void printArray(int a[], int n)
+{
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\n&quot;);
+}
+
+void selectionSort(int a[], int n, int start)
+{
+    if (start &gt;= n - 1)
+        return;
+    int min = start;
+    for (int j = start + 1; j &lt; n; j++)
+        if (a[j] &lt; a[min])
+            min = j;
+    int t = a[start];
+    a[start] = a[min];
+    a[min] = t;
+    selectionSort(a, n, start + 1);
+}
+
+int main(void)
+{
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    int *a = malloc(n * sizeof(int));
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    selectionSort(a, n, 0);
+    printArray(a, n);
+    printf(&quot;Best time complexity: O(n^2)\nWorst time complexity: O(n^2)\n&quot;);
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">6
+64 34 25 12 22 11
+</span>11 12 22 25 34 64 
+Best time complexity: O(n^2)
+Worst time complexity: O(n^2)</pre>
+</div>
+<div class="q" id="q3">
+<p class="qtext">3. Enter a integer array from the user and perform bubble sort algorithm through iteration. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+void printArray(int a[], int n)
+{
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\n&quot;);
+}
+
+int main(void)
+{
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    int *a = malloc(n * sizeof(int));
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    for (int i = 0; i &lt; n - 1; i++)
+    {
+        int swapped = 0;
+        for (int j = 0; j &lt; n - i - 1; j++)
+            if (a[j] &gt; a[j + 1])
+            {
+                int t = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = t;
+                swapped = 1;
+            }
+        if (!swapped)
+            break;
+    }
+    printArray(a, n);
+    printf(&quot;Best time complexity: O(n)\nWorst time complexity: O(n^2)\n&quot;);
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">6
+64 34 25 12 22 11
+</span>11 12 22 25 34 64 
+Best time complexity: O(n)
+Worst time complexity: O(n^2)</pre>
+</div>
+<div class="q" id="q4">
+<p class="qtext">4. Enter a integer array from the user and perform bubble sort algorithm through recursion. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+void printArray(int a[], int n)
+{
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\n&quot;);
+}
+
+void bubblePass(int a[], int n, int end)
+{
+    if (end &lt;= 0)
+        return;
+    int swapped = 0;
+    for (int j = 0; j &lt; end; j++)
+        if (a[j] &gt; a[j + 1])
+        {
+            int t = a[j];
+            a[j] = a[j + 1];
+            a[j + 1] = t;
+            swapped = 1;
+        }
+    if (swapped)
+        bubblePass(a, n, end - 1);
+}
+
+int main(void)
+{
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    int *a = malloc(n * sizeof(int));
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    bubblePass(a, n, n - 1);
+    printArray(a, n);
+    printf(&quot;Best time complexity: O(n)\nWorst time complexity: O(n^2)\n&quot;);
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">6
+64 34 25 12 22 11
+</span>11 12 22 25 34 64 
+Best time complexity: O(n)
+Worst time complexity: O(n^2)</pre>
+</div>
+<div class="q" id="q5">
+<p class="qtext">5. Enter a integer array from the user and perform insertion sort algorithm through iteration. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+void printArray(int a[], int n)
+{
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\n&quot;);
+}
+
+int main(void)
+{
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    int *a = malloc(n * sizeof(int));
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    for (int i = 1; i &lt; n; i++)
+    {
+        int key = a[i], j = i - 1;
+        while (j &gt;= 0 &amp;&amp; a[j] &gt; key)
+        {
+            a[j + 1] = a[j];
+            j--;
+        }
+        a[j + 1] = key;
+    }
+    printArray(a, n);
+    printf(&quot;Best time complexity: O(n)\nWorst time complexity: O(n^2)\n&quot;);
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">6
+64 34 25 12 22 11
+</span>11 12 22 25 34 64 
+Best time complexity: O(n)
+Worst time complexity: O(n^2)</pre>
+</div>
+<div class="q" id="q6">
+<p class="qtext">6. Enter a integer array from the user and perform insertion sort algorithm through recursion. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+void printArray(int a[], int n)
+{
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\n&quot;);
+}
+
+void insertionSort(int a[], int n)
+{
+    if (n &lt;= 1)
+        return;
+    insertionSort(a, n - 1);
+    int key = a[n - 1], j = n - 2;
+    while (j &gt;= 0 &amp;&amp; a[j] &gt; key)
+    {
+        a[j + 1] = a[j];
+        j--;
+    }
+    a[j + 1] = key;
+}
+
+int main(void)
+{
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    int *a = malloc(n * sizeof(int));
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    insertionSort(a, n);
+    printArray(a, n);
+    printf(&quot;Best time complexity: O(n)\nWorst time complexity: O(n^2)\n&quot;);
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">6
+64 34 25 12 22 11
+</span>11 12 22 25 34 64 
+Best time complexity: O(n)
+Worst time complexity: O(n^2)</pre>
+</div>
+<div class="q" id="q7">
+<p class="qtext">7. Enter a integer array from the user and perform merge sort algorithm through iteration. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#define MAX 1000
+
+typedef int Item;
+
+int cmp(Item a, Item b)
+{
+    return (a &gt; b) -(a &lt; b);
+}
+
+void merge(Item a[], Item tmp[], int l, int m, int r)
+{
+    int i = l, j = m + 1, k = l;
+    while (i &lt;= m &amp;&amp; j &lt;= r)
+    {
+        if (cmp(a[i], a[j]) &lt;= 0)
+            tmp[k++] = a[i++];
+        else
+            tmp[k++] = a[j++];
+    }
+    while (i &lt;= m)
+        tmp[k++] = a[i++];
+    while (j &lt;= r)
+        tmp[k++] = a[j++];
+    for (int x = l; x &lt;= r; x++)
+        a[x] = tmp[x];
+}
+
+void mergeSort(Item a[], int n)
+{
+    Item tmp[MAX];
+    for (int width = 1; width &lt; n; width *= 2)
+    {
+        for (int left = 0; left &lt; n; left += 2*width)
+        {
+            int mid = left + width - 1, right = left + 2*width - 1;
+            if (mid &gt;= n)
+                continue;
+            if (right &gt;= n)
+                right = n - 1;
+            merge(a, tmp, left, mid, right);
+        }
+        if (width &gt; n / 2)
+            break;
+    }
+}
+
+int main(void)
+{
+    int n;
+    Item a[MAX];
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt; 0 || n &gt; MAX)
+        return 1;
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    mergeSort(a, n);
+    printf(&quot;Sorted array: &quot;);
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\nBest time complexity: O(n log n)\nWorst time complexity: O(n log n)\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">6
+64 34 25 12 22 11
+</span>Sorted array: 11 12 22 25 34 64 
+Best time complexity: O(n log n)
+Worst time complexity: O(n log n)</pre>
+</div>
+<div class="q" id="q8">
+<p class="qtext">8. Enter a integer array from the user and perform merge sort algorithm through recursion. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#define MAX 1000
+
+typedef int Item;
+
+int cmp(Item a, Item b)
+{
+    return (a &gt; b) -(a &lt; b);
+}
+
+void merge(Item a[], Item tmp[], int l, int m, int r)
+{
+    int i = l, j = m + 1, k = l;
+    while (i &lt;= m &amp;&amp; j &lt;= r)
+    {
+        if (cmp(a[i], a[j]) &lt;= 0)
+            tmp[k++] = a[i++];
+        else
+            tmp[k++] = a[j++];
+    }
+    while (i &lt;= m)
+        tmp[k++] = a[i++];
+    while (j &lt;= r)
+        tmp[k++] = a[j++];
+    for (int x = l; x &lt;= r; x++)
+        a[x] = tmp[x];
+}
+
+void mergeSort(Item a[], Item tmp[], int l, int r)
+{
+    if (l &gt;= r)
+        return;
+    int m = l +(r - l) / 2;
+    mergeSort(a, tmp, l, m);
+    mergeSort(a, tmp, m + 1, r);
+    merge(a, tmp, l, m, r);
+}
+
+int main(void)
+{
+    int n;
+    Item a[MAX];
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt; 0 || n &gt; MAX)
+        return 1;
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    Item tmp[MAX];
+    mergeSort(a, tmp, 0, n - 1);
+    printf(&quot;Sorted array: &quot;);
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\nBest time complexity: O(n log n)\nWorst time complexity: O(n log n)\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">6
+64 34 25 12 22 11
+</span>Sorted array: 11 12 22 25 34 64 
+Best time complexity: O(n log n)
+Worst time complexity: O(n log n)</pre>
+</div>
+<div class="q" id="q9">
+<p class="qtext">9. Enter a integer array from the user and perform quick sort algorithm through iteration. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#define MAX 1000
+
+typedef int Item;
+
+int cmp(Item a, Item b)
+{
+    return (a &gt; b) -(a &lt; b);
+}
+
+void swap(Item *a, Item *b)
+{
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+int partition(Item a[], int low, int high)
+{
+    Item pivot;
+    pivot = a[high];
+    int i = low - 1;
+    for (int j = low; j &lt; high; j++)
+        if (cmp(a[j], pivot) &lt;= 0)
+        {
+            i++;
+            swap(&amp;a[i], &amp;a[j]);
+        }
+    swap(&amp;a[i + 1], &amp;a[high]);
+    return i + 1;
+}
+
+void quickSort(Item a[], int n)
+{
+    int stack[2*MAX], top = -1;
+    if (n &gt; 1)
+    {
+        stack[++top] = 0;
+        stack[++top] = n - 1;
+    }
+    while (top &gt;= 0)
+    {
+        int high = stack[top--], low = stack[top--];
+        int p = partition(a, low, high);
+        if (p - 1 &gt; low)
+        {
+            stack[++top] = low;
+            stack[++top] = p - 1;
+        }
+        if (p + 1 &lt; high)
+        {
+            stack[++top] = p + 1;
+            stack[++top] = high;
+        }
+    }
+}
+
+int main(void)
+{
+    int n;
+    Item a[MAX];
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt; 0 || n &gt; MAX)
+        return 1;
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    quickSort(a, n);
+    printf(&quot;Sorted array: &quot;);
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\nBest time complexity: O(n log n)\nWorst time complexity: O(n^2)\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">6
+64 34 25 12 22 11
+</span>Sorted array: 11 12 22 25 34 64 
+Best time complexity: O(n log n)
+Worst time complexity: O(n^2)</pre>
+</div>
+<div class="q" id="q10">
+<p class="qtext">10. Enter a integer array from the user and perform quick sort algorithm through recursion. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#define MAX 1000
+
+typedef int Item;
+
+int cmp(Item a, Item b)
+{
+    return (a &gt; b) -(a &lt; b);
+}
+
+void swap(Item *a, Item *b)
+{
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+int partition(Item a[], int low, int high)
+{
+    Item pivot;
+    pivot = a[high];
+    int i = low - 1;
+    for (int j = low; j &lt; high; j++)
+        if (cmp(a[j], pivot) &lt;= 0)
+        {
+            i++;
+            swap(&amp;a[i], &amp;a[j]);
+        }
+    swap(&amp;a[i + 1], &amp;a[high]);
+    return i + 1;
+}
+
+void quickSort(Item a[], int low, int high)
+{
+    if (low &lt; high)
+    {
+        int p = partition(a, low, high);
+        quickSort(a, low, p - 1);
+        quickSort(a, p + 1, high);
+    }
+}
+
+int main(void)
+{
+    int n;
+    Item a[MAX];
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt; 0 || n &gt; MAX)
+        return 1;
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    quickSort(a, 0, n - 1);
+    printf(&quot;Sorted array: &quot;);
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\nBest time complexity: O(n log n)\nWorst time complexity: O(n^2)\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">6
+64 34 25 12 22 11
+</span>Sorted array: 11 12 22 25 34 64 
+Best time complexity: O(n log n)
+Worst time complexity: O(n^2)</pre>
+</div>
+<div class="q" id="q11">
+<p class="qtext">11. Enter a string array from the user and perform selection sort algorithm through iteration. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#define MAXLEN 100
+
+void printArray(char a[][MAXLEN], int n)
+{
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%s &quot;, a[i]);
+    printf(&quot;\n&quot;);
+}
+
+int main(void)
+{
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    char (*a)[MAXLEN] = malloc(n*MAXLEN);
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%99s&quot;, a[i]);
+    for (int i = 0; i &lt; n - 1; i++)
+    {
+        int m = i;
+        for (int j = i + 1; j &lt; n; j++)
+            if (strcmp(a[j], a[m]) &lt; 0)
+                m = j;
+        char t[MAXLEN];
+        strcpy(t, a[i]);
+        strcpy(a[i], a[m]);
+        strcpy(a[m], t);
+    }
+    printArray(a, n);
+    printf(&quot;Best time complexity: O(n^2)\nWorst time complexity: O(n^2)\n&quot;);
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">5
+mango apple banana cherry grape
+</span>apple banana cherry grape mango 
+Best time complexity: O(n^2)
+Worst time complexity: O(n^2)</pre>
+</div>
+<div class="q" id="q12">
+<p class="qtext">12. Enter a string array from the user and perform selection sort algorithm through recursion. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#define MAXLEN 100
+
+void printArray(char a[][MAXLEN], int n)
+{
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%s &quot;, a[i]);
+    printf(&quot;\n&quot;);
+}
+
+void sort(char a[][MAXLEN], int n, int i)
+{
+    if (i &gt;= n - 1)
+        return;
+    int m = i;
+    for (int j = i + 1; j &lt; n; j++)
+        if (strcmp(a[j], a[m]) &lt; 0)
+            m = j;
+    char t[MAXLEN];
+    strcpy(t, a[i]);
+    strcpy(a[i], a[m]);
+    strcpy(a[m], t);
+    sort(a, n, i + 1);
+}
+
+int main(void)
+{
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    char (*a)[MAXLEN] = malloc(n*MAXLEN);
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%99s&quot;, a[i]);
+    sort(a, n, 0);
+    printArray(a, n);
+    printf(&quot;Best time complexity: O(n^2)\nWorst time complexity: O(n^2)\n&quot;);
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">5
+mango apple banana cherry grape
+</span>apple banana cherry grape mango 
+Best time complexity: O(n^2)
+Worst time complexity: O(n^2)</pre>
+</div>
+<div class="q" id="q13">
+<p class="qtext">13. Enter a string array from the user and perform bubble sort algorithm through iteration. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#define MAXLEN 100
+
+void printArray(char a[][MAXLEN], int n)
+{
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%s &quot;, a[i]);
+    printf(&quot;\n&quot;);
+}
+
+int main(void)
+{
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    char (*a)[MAXLEN] = malloc(n*MAXLEN);
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%99s&quot;, a[i]);
+    for (int i = 0; i &lt; n - 1; i++)
+    {
+        int sw = 0;
+        for (int j = 0; j &lt; n - i - 1; j++)
+            if (strcmp(a[j], a[j + 1]) &gt; 0)
+            {
+                char t[MAXLEN];
+                strcpy(t, a[j]);
+                strcpy(a[j], a[j + 1]);
+                strcpy(a[j + 1], t);
+                sw = 1;
+            }
+        if (!sw)
+            break;
+    }
+    printArray(a, n);
+    printf(&quot;Best time complexity: O(n)\nWorst time complexity: O(n^2)\n&quot;);
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">5
+mango apple banana cherry grape
+</span>apple banana cherry grape mango 
+Best time complexity: O(n)
+Worst time complexity: O(n^2)</pre>
+</div>
+<div class="q" id="q14">
+<p class="qtext">14. Enter a string array from the user and perform bubble sort algorithm through recursion. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#define MAXLEN 100
+
+void printArray(char a[][MAXLEN], int n)
+{
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%s &quot;, a[i]);
+    printf(&quot;\n&quot;);
+}
+
+void sort(char a[][MAXLEN], int end)
+{
+    if (end &lt;= 0)
+        return;
+    int sw = 0;
+    for (int j = 0; j &lt; end; j++)
+        if (strcmp(a[j], a[j + 1]) &gt; 0)
+        {
+            char t[MAXLEN];
+            strcpy(t, a[j]);
+            strcpy(a[j], a[j + 1]);
+            strcpy(a[j + 1], t);
+            sw = 1;
+        }
+    if (sw)
+        sort(a, end - 1);
+}
+
+int main(void)
+{
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    char (*a)[MAXLEN] = malloc(n*MAXLEN);
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%99s&quot;, a[i]);
+    sort(a, n - 1);
+    printArray(a, n);
+    printf(&quot;Best time complexity: O(n)\nWorst time complexity: O(n^2)\n&quot;);
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">5
+mango apple banana cherry grape
+</span>apple banana cherry grape mango 
+Best time complexity: O(n)
+Worst time complexity: O(n^2)</pre>
+</div>
+<div class="q" id="q15">
+<p class="qtext">15. Enter a string array from the user and perform insertion sort algorithm through iteration. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#define MAXLEN 100
+
+void printArray(char a[][MAXLEN], int n)
+{
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%s &quot;, a[i]);
+    printf(&quot;\n&quot;);
+}
+
+int main(void)
+{
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    char (*a)[MAXLEN] = malloc(n*MAXLEN);
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%99s&quot;, a[i]);
+    for (int i = 1; i &lt; n; i++)
+    {
+        char key[MAXLEN];
+        strcpy(key, a[i]);
+        int j = i - 1;
+        while (j &gt;= 0 &amp;&amp; strcmp(a[j], key) &gt; 0)
+        {
+            strcpy(a[j + 1], a[j]);
+            j--;
+        }
+        strcpy(a[j + 1], key);
+    }
+    printArray(a, n);
+    printf(&quot;Best time complexity: O(n)\nWorst time complexity: O(n^2)\n&quot;);
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">5
+mango apple banana cherry grape
+</span>apple banana cherry grape mango 
+Best time complexity: O(n)
+Worst time complexity: O(n^2)</pre>
+</div>
+<div class="q" id="q16">
+<p class="qtext">16. Enter a string array from the user and perform insertion sort algorithm through recursion. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#define MAXLEN 100
+
+void printArray(char a[][MAXLEN], int n)
+{
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%s &quot;, a[i]);
+    printf(&quot;\n&quot;);
+}
+
+void sort(char a[][MAXLEN], int n)
+{
+    if (n &lt;= 1)
+        return;
+    sort(a, n - 1);
+    char key[MAXLEN];
+    strcpy(key, a[n - 1]);
+    int j = n - 2;
+    while (j &gt;= 0 &amp;&amp; strcmp(a[j], key) &gt; 0)
+    {
+        strcpy(a[j + 1], a[j]);
+        j--;
+    }
+    strcpy(a[j + 1], key);
+}
+
+int main(void)
+{
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    char (*a)[MAXLEN] = malloc(n*MAXLEN);
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%99s&quot;, a[i]);
+    sort(a, n);
+    printArray(a, n);
+    printf(&quot;Best time complexity: O(n)\nWorst time complexity: O(n^2)\n&quot;);
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">5
+mango apple banana cherry grape
+</span>apple banana cherry grape mango 
+Best time complexity: O(n)
+Worst time complexity: O(n^2)</pre>
+</div>
+<div class="q" id="q17">
+<p class="qtext">17. Enter a string array from the user and perform merge sort algorithm through iteration. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#define MAX 1000
+#define LEN 100
+
+typedef char Item[LEN];
+
+int cmp(Item a, Item b)
+{
+    return strcmp(a, b);
+}
+
+void merge(Item a[], Item tmp[], int l, int m, int r)
+{
+    int i = l, j = m + 1, k = l;
+    while (i &lt;= m &amp;&amp; j &lt;= r)
+    {
+        if (cmp(a[i], a[j]) &lt;= 0)
+            strcpy(tmp[k++], a[i++]);
+        else
+            strcpy(tmp[k++], a[j++]);
+    }
+    while (i &lt;= m)
+        strcpy(tmp[k++], a[i++]);
+    while (j &lt;= r)
+        strcpy(tmp[k++], a[j++]);
+    for (int x = l; x &lt;= r; x++)
+        strcpy(a[x], tmp[x]);
+}
+
+void mergeSort(Item a[], int n)
+{
+    Item tmp[MAX];
+    for (int width = 1; width &lt; n; width *= 2)
+    {
+        for (int left = 0; left &lt; n; left += 2*width)
+        {
+            int mid = left + width - 1, right = left + 2*width - 1;
+            if (mid &gt;= n)
+                continue;
+            if (right &gt;= n)
+                right = n - 1;
+            merge(a, tmp, left, mid, right);
+        }
+        if (width &gt; n / 2)
+            break;
+    }
+}
+
+int main(void)
+{
+    int n;
+    Item a[MAX];
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt; 0 || n &gt; MAX)
+        return 1;
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%99s&quot;, a[i]);
+    mergeSort(a, n);
+    printf(&quot;Sorted array: &quot;);
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%s &quot;, a[i]);
+    printf(&quot;\nBest time complexity: O(n log n)\nWorst time complexity: O(n log n)\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">5
+mango apple banana cherry grape
+</span>Sorted array: apple banana cherry grape mango 
+Best time complexity: O(n log n)
+Worst time complexity: O(n log n)</pre>
+</div>
+<div class="q" id="q18">
+<p class="qtext">18. Enter a string array from the user and perform merge sort algorithm through recursion. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#define MAX 1000
+#define LEN 100
+
+typedef char Item[LEN];
+
+int cmp(Item a, Item b)
+{
+    return strcmp(a, b);
+}
+
+void merge(Item a[], Item tmp[], int l, int m, int r)
+{
+    int i = l, j = m + 1, k = l;
+    while (i &lt;= m &amp;&amp; j &lt;= r)
+    {
+        if (cmp(a[i], a[j]) &lt;= 0)
+            strcpy(tmp[k++], a[i++]);
+        else
+            strcpy(tmp[k++], a[j++]);
+    }
+    while (i &lt;= m)
+        strcpy(tmp[k++], a[i++]);
+    while (j &lt;= r)
+        strcpy(tmp[k++], a[j++]);
+    for (int x = l; x &lt;= r; x++)
+        strcpy(a[x], tmp[x]);
+}
+
+void mergeSort(Item a[], Item tmp[], int l, int r)
+{
+    if (l &gt;= r)
+        return;
+    int m = l +(r - l) / 2;
+    mergeSort(a, tmp, l, m);
+    mergeSort(a, tmp, m + 1, r);
+    merge(a, tmp, l, m, r);
+}
+
+int main(void)
+{
+    int n;
+    Item a[MAX];
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt; 0 || n &gt; MAX)
+        return 1;
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%99s&quot;, a[i]);
+    Item tmp[MAX];
+    mergeSort(a, tmp, 0, n - 1);
+    printf(&quot;Sorted array: &quot;);
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%s &quot;, a[i]);
+    printf(&quot;\nBest time complexity: O(n log n)\nWorst time complexity: O(n log n)\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">5
+mango apple banana cherry grape
+</span>Sorted array: apple banana cherry grape mango 
+Best time complexity: O(n log n)
+Worst time complexity: O(n log n)</pre>
+</div>
+<div class="q" id="q19">
+<p class="qtext">19. Enter a string array from the user and perform quick sort algorithm through iteration. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#define MAX 1000
+#define LEN 100
+
+typedef char Item[LEN];
+
+int cmp(Item a, Item b)
+{
+    return strcmp(a, b);
+}
+
+void swap(Item a, Item b)
+{
+    char t[LEN];
+    strcpy(t, a);
+    strcpy(a, b);
+    strcpy(b, t);
+}
+
+int partition(Item a[], int low, int high)
+{
+    Item pivot;
+    strcpy(pivot, a[high]);
+    int i = low - 1;
+    for (int j = low; j &lt; high; j++)
+        if (cmp(a[j], pivot) &lt;= 0)
+        {
+            i++;
+            swap(a[i], a[j]);
+        }
+    swap(a[i + 1], a[high]);
+    return i + 1;
+}
+
+void quickSort(Item a[], int n)
+{
+    int stack[2*MAX], top = -1;
+    if (n &gt; 1)
+    {
+        stack[++top] = 0;
+        stack[++top] = n - 1;
+    }
+    while (top &gt;= 0)
+    {
+        int high = stack[top--], low = stack[top--];
+        int p = partition(a, low, high);
+        if (p - 1 &gt; low)
+        {
+            stack[++top] = low;
+            stack[++top] = p - 1;
+        }
+        if (p + 1 &lt; high)
+        {
+            stack[++top] = p + 1;
+            stack[++top] = high;
+        }
+    }
+}
+
+int main(void)
+{
+    int n;
+    Item a[MAX];
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt; 0 || n &gt; MAX)
+        return 1;
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%99s&quot;, a[i]);
+    quickSort(a, n);
+    printf(&quot;Sorted array: &quot;);
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%s &quot;, a[i]);
+    printf(&quot;\nBest time complexity: O(n log n)\nWorst time complexity: O(n^2)\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">5
+mango apple banana cherry grape
+</span>Sorted array: apple banana cherry grape mango 
+Best time complexity: O(n log n)
+Worst time complexity: O(n^2)</pre>
+</div>
+<div class="q" id="q20">
+<p class="qtext">20. Enter a string array from the user and perform quick sort algorithm through recursion. also calculate the worst and best complexity with exact time.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#define MAX 1000
+#define LEN 100
+
+typedef char Item[LEN];
+
+int cmp(Item a, Item b)
+{
+    return strcmp(a, b);
+}
+
+void swap(Item a, Item b)
+{
+    char t[LEN];
+    strcpy(t, a);
+    strcpy(a, b);
+    strcpy(b, t);
+}
+
+int partition(Item a[], int low, int high)
+{
+    Item pivot;
+    strcpy(pivot, a[high]);
+    int i = low - 1;
+    for (int j = low; j &lt; high; j++)
+        if (cmp(a[j], pivot) &lt;= 0)
+        {
+            i++;
+            swap(a[i], a[j]);
+        }
+    swap(a[i + 1], a[high]);
+    return i + 1;
+}
+
+void quickSort(Item a[], int low, int high)
+{
+    if (low &lt; high)
+    {
+        int p = partition(a, low, high);
+        quickSort(a, low, p - 1);
+        quickSort(a, p + 1, high);
+    }
+}
+
+int main(void)
+{
+    int n;
+    Item a[MAX];
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt; 0 || n &gt; MAX)
+        return 1;
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%99s&quot;, a[i]);
+    quickSort(a, 0, n - 1);
+    printf(&quot;Sorted array: &quot;);
+    for (int i = 0; i &lt; n; i++)
+        printf(&quot;%s &quot;, a[i]);
+    printf(&quot;\nBest time complexity: O(n log n)\nWorst time complexity: O(n^2)\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">5
+mango apple banana cherry grape
+</span>Sorted array: apple banana cherry grape mango 
+Best time complexity: O(n log n)
+Worst time complexity: O(n^2)</pre>
+</div>
+</div>
+<footer>My Data Structures Website</footer>
+</body></html>

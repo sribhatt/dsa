@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Single Dimensional Array | Data Structures in C</title><style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#1f2a44;background:linear-gradient(180deg,#bcd3ec,#e9f0f8);min-height:100vh}
+nav{background:#5e161f;padding:14px 24px;display:flex;gap:34px}
+nav a{color:#fff;font-weight:bold;font-size:20px;text-decoration:none}
+nav a:hover{text-decoration:underline}
+header{background:#8a5a2e;text-align:center;color:#fff;padding:34px 12px 40px}
+header h1{margin:0 0 26px;font-size:48px}
+header h2{margin:0;font-size:36px}
+.back{display:inline-block;margin:14px 24px;color:#1a4fb4;font-size:22px}
+.card{max-width:1100px;margin:10px auto 40px;background:rgba(255,255,255,.92);border-radius:16px;padding:26px 30px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.card>h2{color:#b08560;font-size:34px;margin:0 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.chips a{background:#8a5a2e;color:#fff;text-decoration:none;border-radius:8px;padding:5px 11px;font-size:14px;font-weight:bold}
+.chips a:hover{background:#5e161f}
+.q{padding:18px 0 8px;border-top:1px solid #e3d6c8;scroll-margin-top:10px}
+.qtext{font-size:21px;font-weight:bold;color:#20305a;margin:6px 0 14px;line-height:1.4}
+h3{margin:14px 0 8px;font-size:22px;color:#222}
+pre{margin:0;border-radius:12px;padding:18px 20px;overflow:auto;font-family:Consolas,Menlo,monospace;font-size:15px;line-height:1.5;tab-size:4}
+pre.code{background:#6f7f69;color:#f4f4e8}
+pre.out{background:#7d8a89;color:#fff;max-height:460px}
+.in{color:#ffe38a;font-weight:bold}
+.wrap{position:relative}
+.copy{position:absolute;top:8px;right:10px;background:rgba(255,255,255,.85);color:#333;border:0;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:13px}
+.note{font-size:13px;color:#555;margin:6px 2px 0}
+footer{text-align:center;padding:26px;color:#fff;background:#5e161f}
+/* home */
+body.home{background:linear-gradient(180deg,#8d4b22 0%,#c19a8e 70%,#b88f84 100%);color:#fff}
+.home h1{text-align:center;font-size:46px;margin:44px 12px 50px}
+.grid{max-width:1150px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px}
+.box{display:block;background:#f6efe9;color:#c4873f;text-decoration:none;text-align:center;font-weight:bold;font-size:22px;padding:30px 12px;border-radius:14px;box-shadow:0 5px 14px rgba(0,0,0,.2);transition:transform .2s,box-shadow .2s,background .2s,color .2s}
+.box small{display:block;margin-top:8px;font-size:14px;font-weight:normal;color:#9b7a55}
+.box:hover{transform:translateY(-6px) scale(1.04);background:#fff;color:#7a3a14;box-shadow:0 12px 26px rgba(0,0,0,.35)}
+.homefoot{text-align:center;margin:60px 0 40px;font-size:16px}
+.page{max-width:800px;margin:30px auto;background:rgba(255,255,255,.92);border-radius:16px;padding:26px 30px}
+@media(max-width:640px){header h1{font-size:30px}header h2{font-size:24px}.qtext{font-size:18px}nav{gap:18px}pre{font-size:13px}}
+</style></head>
+<body><nav><a href="index.html">home</a><a href="about.html">about</a><a href="contact.html">contact</a></nav>
+<header><h1>DATA STRUCTURES</h1><h2>Single Dimensional Array</h2></header>
+<a class="back" href="index.html">&larr; Back to Home</a>
+<div class="card"><h2>Single Dimensional Array Questions</h2>
+<div class="q" id="q1">
+<p class="qtext">1. Enter an array from user and display all the value ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    printf(&quot;Array: &quot;);
+    for (i = 0; i &lt; n; i++)
+        printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">5
+</span>Enter 5 elements: <span class="in">10 20 30 40 50
+</span>Array: 10 20 30 40 50 </pre>
+</div>
+<div class="q" id="q2">
+<p class="qtext">2. Enter an array from user and print the array in reverse order ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    printf(&quot;Reverse: &quot;);
+    for (i = n - 1; i &gt;= 0; i--)
+        printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">5
+</span>Enter 5 elements: <span class="in">10 20 30 40 50
+</span>Reverse: 50 40 30 20 10 </pre>
+</div>
+<div class="q" id="q3">
+<p class="qtext">3. Enter an array from user and copy the array into second array?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i, b[100];
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    for (i = 0; i &lt; n; i++)
+        b[i] = a[i];
+    printf(&quot;Second array: &quot;);
+    for (i = 0; i &lt; n; i++)
+        printf(&quot;%d &quot;, b[i]);
+    printf(&quot;\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">5
+</span>Enter 5 elements: <span class="in">10 20 30 40 50
+</span>Second array: 10 20 30 40 50 </pre>
+</div>
+<div class="q" id="q4">
+<p class="qtext">4. Enter an array from user and copy it into another array in reverse order?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i, b[100];
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    for (i = 0; i &lt; n; i++)
+        b[i] = a[n - 1 - i];
+    printf(&quot;Second array (reverse): &quot;);
+    for (i = 0; i &lt; n; i++)
+        printf(&quot;%d &quot;, b[i]);
+    printf(&quot;\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">5
+</span>Enter 5 elements: <span class="in">10 20 30 40 50
+</span>Second array (reverse): 50 40 30 20 10 </pre>
+</div>
+<div class="q" id="q5">
+<p class="qtext">5. Enter an array from user and print the number which is even ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    printf(&quot;Even numbers: &quot;);
+    for (i = 0; i &lt; n; i++)
+        if (a[i] % 2 == 0)
+            printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">6
+</span>Enter 6 elements: <span class="in">12 7 20 33 8 15
+</span>Even numbers: 12 20 8 </pre>
+</div>
+<div class="q" id="q6">
+<p class="qtext">6. Enter an array from user and print the number which is positive ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    printf(&quot;Positive numbers: &quot;);
+    for (i = 0; i &lt; n; i++)
+        if (a[i] &gt; 0)
+            printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">6
+</span>Enter 6 elements: <span class="in">5 -3 8 -1 0 12
+</span>Positive numbers: 5 8 12 </pre>
+</div>
+<div class="q" id="q7">
+<p class="qtext">7. Enter an array from user and square all the values of array ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    for (i = 0; i &lt; n; i++)
+        a[i] = a[i] * a[i];
+    printf(&quot;Squared array: &quot;);
+    for (i = 0; i &lt; n; i++)
+        printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">5
+</span>Enter 5 elements: <span class="in">1 2 3 4 5
+</span>Squared array: 1 4 9 16 25 </pre>
+</div>
+<div class="q" id="q8">
+<p class="qtext">8. Enter an array from user and find maximum and minimum value?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i, max, min;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    max = a[0];
+    min = a[0];
+    for (i = 1; i &lt; n; i++)
+    {
+        if (a[i] &gt; max)
+            max = a[i];
+        if (a[i] &lt; min)
+            min = a[i];
+    }
+    printf(&quot;Maximum = %d\n&quot;, max);
+    printf(&quot;Minimum = %d\n&quot;, min);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">6
+</span>Enter 6 elements: <span class="in">45 12 89 3 67 21
+</span>Maximum = 89
+Minimum = 3</pre>
+</div>
+<div class="q" id="q9">
+<p class="qtext">9. Enter an array from user and find the k-th smallest value?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i, j, k, temp;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    printf(&quot;Enter k: &quot;);
+    scanf(&quot;%d&quot;, &amp;k);
+    for (i = 0; i &lt; n - 1; i++)
+        for (j = 0; j &lt; n - 1 - i; j++)
+            if (a[j] &gt; a[j + 1])
+            {
+                temp = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = temp;
+            }
+    if (k &gt;= 1 &amp;&amp; k &lt;= n)
+        printf(&quot;k = %d, k-th smallest value = %d\n&quot;, k, a[k - 1]);
+    else
+        printf(&quot;Invalid k\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">6
+</span>Enter 6 elements: <span class="in">45 12 89 3 67 21
+</span>Enter k: <span class="in">3
+</span>k = 3, k-th smallest value = 21</pre>
+</div>
+<div class="q" id="q10">
+<p class="qtext">10. Enter an array from user and add all values ?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i, sum = 0;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    for (i = 0; i &lt; n; i++)
+        sum = sum + a[i];
+    printf(&quot;Sum = %d\n&quot;, sum);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">5
+</span>Enter 5 elements: <span class="in">10 20 30 40 50
+</span>Sum = 150</pre>
+</div>
+<div class="q" id="q11">
+<p class="qtext">11. Enter an array from user and find the duplicate values?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i, j, seen, found = 0;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    printf(&quot;Duplicate values: &quot;);
+    for (i = 0; i &lt; n; i++)
+    {
+        seen = 0;
+        for (j = 0; j &lt; i; j++)
+            if (a[j] == a[i])
+            {
+                seen = 1;
+                break;
+            }
+        if (seen)
+            continue;
+        for (j = i + 1; j &lt; n; j++)
+            if (a[j] == a[i])
+            {
+                printf(&quot;%d &quot;, a[i]);
+                found = 1;
+                break;
+            }
+    }
+    if (found == 0)
+        printf(&quot;None&quot;);
+    printf(&quot;\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">8
+</span>Enter 8 elements: <span class="in">1 2 3 2 4 1 5 3
+</span>Duplicate values: 1 2 3 </pre>
+</div>
+<div class="q" id="q12">
+<p class="qtext">12. Enter an array from user and remove the duplicate values and fill with zero?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i, j, k, dup, m = 0;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    for (i = 0; i &lt; n; i++)
+    {
+        dup = 0;
+        for (j = 0; j &lt; m; j++)
+            if (a[i] == a[j])
+            {
+                dup = 1;
+                break;
+            }
+        if (dup == 0)
+        {
+            a[m] = a[i];
+            m++;
+        }
+    }
+    for (k = m; k &lt; n; k++)
+        a[k] = 0;
+    printf(&quot;Array after removing duplicates: &quot;);
+    for (i = 0; i &lt; n; i++)
+        printf(&quot;%d &quot;, a[i]);
+    printf(&quot;\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">8
+</span>Enter 8 elements: <span class="in">1 2 3 2 4 1 5 3
+</span>Array after removing duplicates: 1 2 3 4 5 0 0 0 </pre>
+</div>
+<div class="q" id="q13">
+<p class="qtext">13. Enter an array from user and count the duplicate values?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i, j, count, seen, total = 0;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    for (i = 0; i &lt; n; i++)
+    {
+        seen = 0;
+        for (j = 0; j &lt; i; j++)
+            if (a[j] == a[i])
+            {
+                seen = 1;
+                break;
+            }
+        if (seen)
+            continue;
+        count = 1;
+        for (j = i + 1; j &lt; n; j++)
+            if (a[j] == a[i])
+                count++;
+        if (count &gt; 1)
+        {
+            printf(&quot;%d appears %d times\n&quot;, a[i], count);
+            total++;
+        }
+    }
+    printf(&quot;Total duplicate values = %d\n&quot;, total);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">7
+</span>Enter 7 elements: <span class="in">4 5 5 6 4 7 5
+</span>4 appears 2 times
+5 appears 3 times
+Total duplicate values = 2</pre>
+</div>
+<div class="q" id="q14">
+<p class="qtext">14. Enter an array from user and print all possible combinations of the elements?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i, j, mask;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    if (n &gt; 15)
+    {
+        printf(&quot;Use n &lt;= 15\n&quot;);
+        return 0;
+    }
+    printf(&quot;All combinations:\n&quot;);
+    for (mask = 0; mask &lt; (1 &lt;&lt; n); mask++)
+    {
+        printf(&quot;{ &quot;);
+        for (j = 0; j &lt; n; j++)
+            if (mask &amp; (1 &lt;&lt; j))
+                printf(&quot;%d &quot;, a[j]);
+        printf(&quot;}\n&quot;);
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">3
+</span>Enter 3 elements: <span class="in">1 2 3
+</span>All combinations:
+{ }
+{ 1 }
+{ 2 }
+{ 1 2 }
+{ 3 }
+{ 1 3 }
+{ 2 3 }
+{ 1 2 3 }</pre>
+</div>
+<div class="q" id="q15">
+<p class="qtext">15. Enter an array from user and print all the palindrome numbers?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i, num, rev, rem, found = 0;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    printf(&quot;Palindrome numbers: &quot;);
+    for (i = 0; i &lt; n; i++)
+    {
+        if (a[i] &lt; 0)
+            continue;
+        num = a[i];
+        rev = 0;
+        while (num &gt; 0)
+        {
+            rem = num % 10;
+            rev = rev * 10 + rem;
+            num = num / 10;
+        }
+        if (rev == a[i])
+        {
+            printf(&quot;%d &quot;, a[i]);
+            found = 1;
+        }
+    }
+    if (found == 0)
+        printf(&quot;None&quot;);
+    printf(&quot;\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">6
+</span>Enter 6 elements: <span class="in">121 45 363 10 7 1331
+</span>Palindrome numbers: 121 363 7 1331 </pre>
+</div>
+<div class="q" id="q16">
+<p class="qtext">16. Enter two arrays from the user and check they are same or not?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], b[100], n1, n2, i, same = 1;
+    printf(&quot;Enter size of first array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n1);
+    printf(&quot;Enter %d elements: &quot;, n1);
+    for (i = 0; i &lt; n1; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    printf(&quot;Enter size of second array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n2);
+    printf(&quot;Enter %d elements: &quot;, n2);
+    for (i = 0; i &lt; n2; i++)
+        scanf(&quot;%d&quot;, &amp;b[i]);
+    if (n1 != n2)
+        same = 0;
+    else
+        for (i = 0; i &lt; n1; i++)
+            if (a[i] != b[i])
+            {
+                same = 0;
+                break;
+            }
+    if (same)
+        printf(&quot;Both arrays are same\n&quot;);
+    else
+        printf(&quot;Arrays are not same\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of first array: <span class="in">4
+</span>Enter 4 elements: <span class="in">1 2 3 4
+</span>Enter size of second array: <span class="in">4
+</span>Enter 4 elements: <span class="in">1 2 3 4
+</span>Both arrays are same</pre>
+</div>
+<div class="q" id="q17">
+<p class="qtext">17. Merge the two sorted arrays into one array but in sorted order?</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], b[100], c[200], n1, n2, i, j = 0, k = 0;
+    printf(&quot;Enter size of first sorted array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n1);
+    printf(&quot;Enter %d elements: &quot;, n1);
+    for (i = 0; i &lt; n1; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    printf(&quot;Enter size of second sorted array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n2);
+    printf(&quot;Enter %d elements: &quot;, n2);
+    for (i = 0; i &lt; n2; i++)
+        scanf(&quot;%d&quot;, &amp;b[i]);
+    i = 0;
+    while (i &lt; n1 &amp;&amp; j &lt; n2)
+    {
+        if (a[i] &lt;= b[j])
+            c[k++] = a[i++];
+        else
+            c[k++] = b[j++];
+    }
+    while (i &lt; n1)
+        c[k++] = a[i++];
+    while (j &lt; n2)
+        c[k++] = b[j++];
+    printf(&quot;Merged array: &quot;);
+    for (i = 0; i &lt; k; i++)
+        printf(&quot;%d &quot;, c[i]);
+    printf(&quot;\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of first sorted array: <span class="in">4
+</span>Enter 4 elements: <span class="in">1 3 5 7
+</span>Enter size of second sorted array: <span class="in">4
+</span>Enter 4 elements: <span class="in">2 4 6 8
+</span>Merged array: 1 2 3 4 5 6 7 8 </pre>
+</div>
+<div class="q" id="q18">
+<p class="qtext">18. Find the local minima in the array? (An element in an array is a local minima if it less than the element after it, and the element before it)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i, found = 0;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    printf(&quot;Local minima: &quot;);
+    for (i = 1; i &lt; n - 1; i++)
+        if (a[i] &lt; a[i - 1] &amp;&amp; a[i] &lt; a[i + 1])
+        {
+            printf(&quot;%d &quot;, a[i]);
+            found = 1;
+        }
+    if (found == 0)
+        printf(&quot;None&quot;);
+    printf(&quot;\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">8
+</span>Enter 8 elements: <span class="in">8 3 9 2 7 1 6 4
+</span>Local minima: 3 2 1 </pre>
+</div>
+<div class="q" id="q19">
+<p class="qtext">19. Find the local maxima in the array? (An element in an array is a local maxima if it greater than the element after it, and the element before it)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i, found = 0;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    printf(&quot;Local maxima: &quot;);
+    for (i = 1; i &lt; n - 1; i++)
+        if (a[i] &gt; a[i - 1] &amp;&amp; a[i] &gt; a[i + 1])
+        {
+            printf(&quot;%d &quot;, a[i]);
+            found = 1;
+        }
+    if (found == 0)
+        printf(&quot;None&quot;);
+    printf(&quot;\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">8
+</span>Enter 8 elements: <span class="in">8 3 9 2 7 1 6 4
+</span>Local maxima: 9 7 6 </pre>
+</div>
+<div class="q" id="q20">
+<p class="qtext">20. Trapping Rain Water Problem: Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a[100], n, i, left[100], right[100], minh, water = 0;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter %d elements: &quot;, n);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    if (n &lt; 3)
+    {
+        printf(&quot;Water trapped = 0\n&quot;);
+        return 0;
+    }
+    left[0] = a[0];
+    for (i = 1; i &lt; n; i++)
+        left[i] = (a[i] &gt; left[i - 1]) ? a[i] : left[i - 1];
+    right[n - 1] = a[n - 1];
+    for (i = n - 2; i &gt;= 0; i--)
+        right[i] = (a[i] &gt; right[i + 1]) ? a[i] : right[i + 1];
+    for (i = 0; i &lt; n; i++)
+    {
+        minh = (left[i] &lt; right[i]) ? left[i] : right[i];
+        water = water + (minh - a[i]);
+    }
+    printf(&quot;Water trapped = %d units\n&quot;, water);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">12
+</span>Enter 12 elements: <span class="in">0 1 0 2 1 0 1 3 2 1 2 1
+</span>Water trapped = 6 units</pre>
+</div>
+</div>
+<footer>My Data Structures Website</footer>
+</body></html>

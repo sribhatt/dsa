@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recursion | Data Structures in C</title><style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#1f2a44;background:linear-gradient(180deg,#bcd3ec,#e9f0f8);min-height:100vh}
+nav{background:#5e161f;padding:14px 24px;display:flex;gap:34px}
+nav a{color:#fff;font-weight:bold;font-size:20px;text-decoration:none}
+nav a:hover{text-decoration:underline}
+header{background:#8a5a2e;text-align:center;color:#fff;padding:34px 12px 40px}
+header h1{margin:0 0 26px;font-size:48px}
+header h2{margin:0;font-size:36px}
+.back{display:inline-block;margin:14px 24px;color:#1a4fb4;font-size:22px}
+.card{max-width:1100px;margin:10px auto 40px;background:rgba(255,255,255,.92);border-radius:16px;padding:26px 30px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.card>h2{color:#b08560;font-size:34px;margin:0 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.chips a{background:#8a5a2e;color:#fff;text-decoration:none;border-radius:8px;padding:5px 11px;font-size:14px;font-weight:bold}
+.chips a:hover{background:#5e161f}
+.q{padding:18px 0 8px;border-top:1px solid #e3d6c8;scroll-margin-top:10px}
+.qtext{font-size:21px;font-weight:bold;color:#20305a;margin:6px 0 14px;line-height:1.4}
+h3{margin:14px 0 8px;font-size:22px;color:#222}
+pre{margin:0;border-radius:12px;padding:18px 20px;overflow:auto;font-family:Consolas,Menlo,monospace;font-size:15px;line-height:1.5;tab-size:4}
+pre.code{background:#6f7f69;color:#f4f4e8}
+pre.out{background:#7d8a89;color:#fff;max-height:460px}
+.in{color:#ffe38a;font-weight:bold}
+.wrap{position:relative}
+.copy{position:absolute;top:8px;right:10px;background:rgba(255,255,255,.85);color:#333;border:0;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:13px}
+.note{font-size:13px;color:#555;margin:6px 2px 0}
+footer{text-align:center;padding:26px;color:#fff;background:#5e161f}
+/* home */
+body.home{background:linear-gradient(180deg,#8d4b22 0%,#c19a8e 70%,#b88f84 100%);color:#fff}
+.home h1{text-align:center;font-size:46px;margin:44px 12px 50px}
+.grid{max-width:1150px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px}
+.box{display:block;background:#f6efe9;color:#c4873f;text-decoration:none;text-align:center;font-weight:bold;font-size:22px;padding:30px 12px;border-radius:14px;box-shadow:0 5px 14px rgba(0,0,0,.2);transition:transform .2s,box-shadow .2s,background .2s,color .2s}
+.box small{display:block;margin-top:8px;font-size:14px;font-weight:normal;color:#9b7a55}
+.box:hover{transform:translateY(-6px) scale(1.04);background:#fff;color:#7a3a14;box-shadow:0 12px 26px rgba(0,0,0,.35)}
+.homefoot{text-align:center;margin:60px 0 40px;font-size:16px}
+.page{max-width:800px;margin:30px auto;background:rgba(255,255,255,.92);border-radius:16px;padding:26px 30px}
+@media(max-width:640px){header h1{font-size:30px}header h2{font-size:24px}.qtext{font-size:18px}nav{gap:18px}pre{font-size:13px}}
+</style></head>
+<body><nav><a href="index.html">home</a><a href="about.html">about</a><a href="contact.html">contact</a></nav>
+<header><h1>DATA STRUCTURES</h1><h2>Recursion</h2></header>
+<a class="back" href="index.html">&larr; Back to Home</a>
+<div class="card"><h2>Recursion Questions</h2>
+<div class="q" id="q1">
+<p class="qtext">1. Calculate factorial of a number using recursion</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+long long fac(int n)
+{
+    if (n &lt;= 1)
+        return 1;
+    return n * fac(n - 1);
+}
+
+int main()
+{
+    int n;
+    printf(&quot;ENTER a number: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt; 0)
+        printf(&quot;factorial Not defined for negative numbers\n&quot;);
+    else
+        printf(&quot;Factorial of %d is = %lld\n&quot;, n, fac(n));
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">ENTER a number: <span class="in">5
+</span>Factorial of 5 is = 120</pre>
+</div>
+<div class="q" id="q2">
+<p class="qtext">2. Calculate fibonacci of a number using recursion</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int fibonic(int n)
+{
+    if (n == 0)
+        return 0;
+    if (n == 1)
+        return 1;
+    return fibonic(n - 1) + fibonic(n - 2);
+}
+
+int main()
+{
+    int n;
+    printf(&quot;enter The number: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;FIBONACCI of %d IS %d\n&quot;, n, fibonic(n));
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">enter The number: <span class="in">7
+</span>FIBONACCI of 7 IS 13</pre>
+</div>
+<div class="q" id="q3">
+<p class="qtext">3. Calculate the sum of natural numbers till 10 using recursion.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int sum(int n)
+{
+    if (n == 0)
+        return 0;
+    return n + sum(n - 1);
+}
+
+int main()
+{
+    printf(&quot;sum of Natural numbers till 10 IS: %d\n&quot;, sum(10));
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">sum of Natural numbers till 10 IS: 55</pre>
+</div>
+<div class="q" id="q4">
+<p class="qtext">4. Convert a number into binary using recursion</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+void toBinary(int n)
+{
+    if (n == 0)
+        return;
+    toBinary(n / 2);
+    printf(&quot;%d&quot;, n % 2);
+}
+
+int main()
+{
+    int n;
+    printf(&quot;Enter A Number: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;BINARY of %d is: &quot;, n);
+    if (n == 0)
+        printf(&quot;0&quot;);
+    else
+        toBinary(n);
+    printf(&quot;\n&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter A Number: <span class="in">10
+</span>BINARY of 10 is: 1010</pre>
+</div>
+<div class="q" id="q5">
+<p class="qtext">5. Find the largest element in the integer array using recursion.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int largest(int a[], int n)
+{
+    int m;
+    if (n == 1)
+        return a[0];
+    m = largest(a, n - 1);
+    return (a[n - 1] &gt; m) ? a[n - 1] : m;
+}
+
+int main()
+{
+    int n, i, a[100];
+    printf(&quot;how many ELEMENTS: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;enter elements: &quot;);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    printf(&quot;LARGEST element Is: %d\n&quot;, largest(a, n));
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">how many ELEMENTS: <span class="in">5
+</span>enter elements: <span class="in">12 45 7 89 23
+</span>LARGEST element Is: 89</pre>
+</div>
+<div class="q" id="q6">
+<p class="qtext">6. Find the smallest element in the integer array using recursion.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int smallest(int a[], int n)
+{
+    int m;
+    if (n == 1)
+        return a[0];
+    m = smallest(a, n - 1);
+    return (a[n - 1] &lt; m) ? a[n - 1] : m;
+}
+
+int main()
+{
+    int n, i, a[100];
+    printf(&quot;HOW many elements: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;ENTER Elements: &quot;);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    printf(&quot;smallest ELEMENT is: %d\n&quot;, smallest(a, n));
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">HOW many elements: <span class="in">5
+</span>ENTER Elements: <span class="in">12 45 7 89 23
+</span>smallest ELEMENT is: 7</pre>
+</div>
+<div class="q" id="q7">
+<p class="qtext">7. Enter the number from the user and add all digits of the number using recursion.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int digitSum(int n)
+{
+    if (n == 0)
+        return 0;
+    return (n % 10) + digitSum(n / 10);
+}
+
+int main()
+{
+    int n;
+    printf(&quot;Enter the NUMBER: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt; 0)
+        n = -n;
+    printf(&quot;SUM of DIGITS is = %d\n&quot;, digitSum(n));
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter the NUMBER: <span class="in">12345
+</span>SUM of DIGITS is = 15</pre>
+</div>
+<div class="q" id="q8">
+<p class="qtext">8. Find the arithmetic mean of an integer array using recursion.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int sumArray(int a[], int n)
+{
+    if (n == 0)
+        return 0;
+    return a[n - 1] + sumArray(a, n - 1);
+}
+
+int main()
+{
+    int n, i, a[100];
+    printf(&quot;number OF elements: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;Enter ELEMENTS: &quot;);
+    for (i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;a[i]);
+    printf(&quot;arithmetic MEAN is: %.2f\n&quot;, (float)sumArray(a, n) / n);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">number OF elements: <span class="in">5
+</span>Enter ELEMENTS: <span class="in">10 20 30 40 50
+</span>arithmetic MEAN is: 30.00</pre>
+</div>
+</div>
+<footer>My Data Structures Website</footer>
+</body></html>

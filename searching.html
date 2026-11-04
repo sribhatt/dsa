@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Searching Algorithms | Data Structures in C</title><style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#1f2a44;background:linear-gradient(180deg,#bcd3ec,#e9f0f8);min-height:100vh}
+nav{background:#5e161f;padding:14px 24px;display:flex;gap:34px}
+nav a{color:#fff;font-weight:bold;font-size:20px;text-decoration:none}
+nav a:hover{text-decoration:underline}
+header{background:#8a5a2e;text-align:center;color:#fff;padding:34px 12px 40px}
+header h1{margin:0 0 26px;font-size:48px}
+header h2{margin:0;font-size:36px}
+.back{display:inline-block;margin:14px 24px;color:#1a4fb4;font-size:22px}
+.card{max-width:1100px;margin:10px auto 40px;background:rgba(255,255,255,.92);border-radius:16px;padding:26px 30px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.card>h2{color:#b08560;font-size:34px;margin:0 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.chips a{background:#8a5a2e;color:#fff;text-decoration:none;border-radius:8px;padding:5px 11px;font-size:14px;font-weight:bold}
+.chips a:hover{background:#5e161f}
+.q{padding:18px 0 8px;border-top:1px solid #e3d6c8;scroll-margin-top:10px}
+.qtext{font-size:21px;font-weight:bold;color:#20305a;margin:6px 0 14px;line-height:1.4}
+h3{margin:14px 0 8px;font-size:22px;color:#222}
+pre{margin:0;border-radius:12px;padding:18px 20px;overflow:auto;font-family:Consolas,Menlo,monospace;font-size:15px;line-height:1.5;tab-size:4}
+pre.code{background:#6f7f69;color:#f4f4e8}
+pre.out{background:#7d8a89;color:#fff;max-height:460px}
+.in{color:#ffe38a;font-weight:bold}
+.wrap{position:relative}
+.copy{position:absolute;top:8px;right:10px;background:rgba(255,255,255,.85);color:#333;border:0;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:13px}
+.note{font-size:13px;color:#555;margin:6px 2px 0}
+footer{text-align:center;padding:26px;color:#fff;background:#5e161f}
+/* home */
+body.home{background:linear-gradient(180deg,#8d4b22 0%,#c19a8e 70%,#b88f84 100%);color:#fff}
+.home h1{text-align:center;font-size:46px;margin:44px 12px 50px}
+.grid{max-width:1150px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px}
+.box{display:block;background:#f6efe9;color:#c4873f;text-decoration:none;text-align:center;font-weight:bold;font-size:22px;padding:30px 12px;border-radius:14px;box-shadow:0 5px 14px rgba(0,0,0,.2);transition:transform .2s,box-shadow .2s,background .2s,color .2s}
+.box small{display:block;margin-top:8px;font-size:14px;font-weight:normal;color:#9b7a55}
+.box:hover{transform:translateY(-6px) scale(1.04);background:#fff;color:#7a3a14;box-shadow:0 12px 26px rgba(0,0,0,.35)}
+.homefoot{text-align:center;margin:60px 0 40px;font-size:16px}
+.page{max-width:800px;margin:30px auto;background:rgba(255,255,255,.92);border-radius:16px;padding:26px 30px}
+@media(max-width:640px){header h1{font-size:30px}header h2{font-size:24px}.qtext{font-size:18px}nav{gap:18px}pre{font-size:13px}}
+</style></head>
+<body><nav><a href="index.html">home</a><a href="about.html">about</a><a href="contact.html">contact</a></nav>
+<header><h1>DATA STRUCTURES</h1><h2>Searching Algorithms</h2></header>
+<a class="back" href="index.html">&larr; Back to Home</a>
+<div class="card"><h2>Searching Algorithms Questions</h2>
+<div class="q" id="q1">
+<p class="qtext">1. Enter a integer array from the user, enter an integer value and perform linear search algorithm through iteration.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int n, key;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    int arr[n];
+    printf(&quot;Enter array elements:\n&quot;);
+    for (int i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;arr[i]);
+    }
+    printf(&quot;Enter value to search: &quot;);
+    scanf(&quot;%d&quot;, &amp;key);
+    for (int i = 0; i &lt; n; i++)
+    {
+        if (arr[i] == key)
+        {
+            printf(&quot;Element found at index %d&quot;, i);
+            return 0;
+        }
+    }
+    printf(&quot;Element not found&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">5
+</span>Enter array elements:
+<span class="in">10 20 30 40 50
+</span>Enter value to search: <span class="in">30
+</span>Element found at index 2</pre>
+</div>
+<div class="q" id="q2">
+<p class="qtext">2. Enter a string from the user, enter a character and perform linear search algorithm through recursion.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int linearSearch(char str[], char key, int index)
+{
+    if (str[index] == &#x27;\0&#x27;)
+        return -1;
+    if (str[index] == key)
+        return index;
+    return linearSearch(str, key, index + 1);
+}
+
+int main()
+{
+    char str[100], key;
+    int result;
+    printf(&quot;Enter string: &quot;);
+    scanf(&quot;%s&quot;, str);
+    printf(&quot;Enter character to search: &quot;);
+    scanf(&quot; %c&quot;, &amp;key);
+    result = linearSearch(str, key, 0);
+    if (result == -1)
+        printf(&quot;Character not found&quot;);
+    else
+        printf(&quot;Character found at index %d&quot;, result);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter string: <span class="in">programming
+</span>Enter character to search: <span class="in">g
+</span>Character found at index 3</pre>
+</div>
+<div class="q" id="q3">
+<p class="qtext">3. Enter a integer array from the user, enter an integer value and perform linear search algorithm through recursion.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int linearSearch(int arr[], int n, int key, int index)
+{
+    if (index == n)
+        return -1;
+    if (arr[index] == key)
+        return index;
+    return linearSearch(arr, n, key, index + 1);
+}
+
+int main()
+{
+    int n, key, result;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    int arr[n];
+    printf(&quot;Enter array elements:\n&quot;);
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;arr[i]);
+    printf(&quot;Enter value to search: &quot;);
+    scanf(&quot;%d&quot;, &amp;key);
+    result = linearSearch(arr, n, key, 0);
+    if (result == -1)
+        printf(&quot;Element not found&quot;);
+    else
+        printf(&quot;Element found at index %d&quot;, result);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">5
+</span>Enter array elements:
+<span class="in">10 20 30 40 50
+</span>Enter value to search: <span class="in">40
+</span>Element found at index 3</pre>
+</div>
+<div class="q" id="q4">
+<p class="qtext">4. Enter a string from the user, enter a character and perform linear search algorithm through iteration.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char str[100], key;
+    int found = -1;
+    printf(&quot;Enter string: &quot;);
+    scanf(&quot;%s&quot;, str);
+    printf(&quot;Enter character to search: &quot;);
+    scanf(&quot; %c&quot;, &amp;key);
+    for (int i = 0; str[i] != &#x27;\0&#x27;; i++)
+    {
+        if (str[i] == key)
+        {
+            found = i;
+            break;
+        }
+    }
+    if (found == -1)
+        printf(&quot;Character not found&quot;);
+    else
+        printf(&quot;Character found at index %d&quot;, found);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter string: <span class="in">hello
+</span>Enter character to search: <span class="in">l
+</span>Character found at index 2</pre>
+</div>
+<div class="q" id="q5">
+<p class="qtext">5. Enter a integer array from the user, enter an integer value and perform binary search algorithm through iteration.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+
+int main()
+{
+    int n, key;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    int arr[n];
+    printf(&quot;Enter elements in sorted order:\n&quot;);
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;arr[i]);
+    printf(&quot;Enter value to search: &quot;);
+    scanf(&quot;%d&quot;, &amp;key);
+    int left = 0;
+    int right = n - 1;
+    int found = -1;
+    while (left &lt;= right)
+    {
+        int mid = left + (right - left) / 2;
+        if (arr[mid] == key)
+        {
+            found = mid;
+            break;
+        }
+        else if (arr[mid] &lt; key)
+        {
+            left = mid + 1;
+        }
+        else
+        {
+            right = mid - 1;
+        }
+    }
+    if (found == -1)
+        printf(&quot;Element not found&quot;);
+    else
+        printf(&quot;Element found at index %d&quot;, found);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">6
+</span>Enter elements in sorted order:
+<span class="in">5 12 18 25 31 47
+</span>Enter value to search: <span class="in">25
+</span>Element found at index 3</pre>
+</div>
+<div class="q" id="q6">
+<p class="qtext">6. Enter a string from the user, enter a character and perform binary search algorithm through recursion.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int binarySearch(char str[], char key, int left, int right)
+{
+    if (left &gt; right)
+        return -1;
+    int mid = left + (right - left) / 2;
+    if (str[mid] == key)
+        return mid;
+    if (str[mid] &lt; key)
+        return binarySearch(str, key, mid + 1, right);
+    return binarySearch(str, key, left, mid - 1);
+}
+
+int main()
+{
+    char str[100], key;
+    int result;
+    printf(&quot;Enter string in sorted order: &quot;);
+    scanf(&quot;%s&quot;, str);
+    printf(&quot;Enter character to search: &quot;);
+    scanf(&quot; %c&quot;, &amp;key);
+    result = binarySearch(str, key, 0, strlen(str) - 1);
+    if (result == -1)
+        printf(&quot;Character not found&quot;);
+    else
+        printf(&quot;Character found at index %d&quot;, result);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter string in sorted order: <span class="in">abcdefg
+</span>Enter character to search: <span class="in">d
+</span>Character found at index 3</pre>
+</div>
+<div class="q" id="q7">
+<p class="qtext">7. Enter a integer array from the user, enter an integer value and perform binary search algorithm through recursion.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code># include &lt;stdio.h&gt;
+
+int binarysearch(int arr[], int low, int high, int key)
+{
+    if (low &gt; high)
+    {
+        return -1;
+    }
+    int mid =(low + high) / 2;
+    if (arr[mid] == key)
+    {
+        return mid;
+    }
+    else if (key &lt; arr[mid])
+    {
+        return binarysearch(arr, low, mid - 1, key);
+    }
+    else
+    {
+        return binarysearch(arr, mid + 1, high, key);
+    }
+}
+
+int main()
+{
+    int arr[100], n, key, result;
+    printf(&quot;enter the number of elements:&quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;enter the array element in sorted order:\n&quot;);
+    for (int i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;arr[i]);
+    }
+    printf(&quot;enter the value to search:&quot;);;
+    scanf(&quot;%d&quot;, &amp;key);
+    result = binarysearch(arr, 0, n - 1, key);
+    if (result == -1)
+    {
+        printf(&quot;element not found&quot;);
+    }
+    else
+    {
+        printf(&quot;element found at position %d&quot;, result + 1);
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">enter the number of elements:<span class="in">6
+</span>enter the array element in sorted order:
+<span class="in">5 12 18 25 31 47
+</span>enter the value to search:<span class="in">31
+</span>element found at position 5</pre>
+</div>
+<div class="q" id="q8">
+<p class="qtext">8. Enter a string from the user, enter a character and perform binary search algorithm through iteration.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char str[100], key;
+    int found = -1;
+    printf(&quot;Enter string in sorted order: &quot;);
+    scanf(&quot;%s&quot;, str);
+    printf(&quot;Enter character to search: &quot;);
+    scanf(&quot; %c&quot;, &amp;key);
+    int left = 0;
+    int right = strlen(str) - 1;
+    while (left &lt;= right)
+    {
+        int mid = left + (right - left) / 2;
+        if (str[mid] == key)
+        {
+            found = mid;
+            break;
+        }
+        else if (str[mid] &lt; key)
+        {
+            left = mid + 1;
+        }
+        else
+        {
+            right = mid - 1;
+        }
+    }
+    if (found == -1)
+        printf(&quot;Character not found&quot;);
+    else
+        printf(&quot;Character found at index %d&quot;, found);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter string in sorted order: <span class="in">abcdefg
+</span>Enter character to search: <span class="in">e
+</span>Character found at index 4</pre>
+</div>
+<div class="q" id="q9">
+<p class="qtext">9. Calculate the best and worst complexity of the linear searching algorithm with exact time taken by the algorithm on integer array.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;time.h&gt;
+
+int linearSearch(int arr[], int n, int key)
+{
+    for (int i = 0; i &lt; n; i++)
+    {
+        if (arr[i] == key)
+            return i;
+    }
+    return -1;
+}
+
+int main()
+{
+    int n, key;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    int arr[n];
+    printf(&quot;Enter array elements:\n&quot;);
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;arr[i]);
+    printf(&quot;Enter value to search: &quot;);
+    scanf(&quot;%d&quot;, &amp;key);
+    clock_t start = clock();
+    int result = linearSearch(arr, n, key);
+    clock_t end = clock();
+    double timeTaken = (double)(end - start) / CLOCKS_PER_SEC;
+    if (result == -1)
+        printf(&quot;Element not found\n&quot;);
+    else
+        printf(&quot;Element found at index %d\n&quot;, result);
+    printf(&quot;Time Taken: %f seconds\n&quot;, timeTaken);
+    printf(&quot;\nBest Case Complexity: O(1)&quot;);
+    printf(&quot;\nWorst Case Complexity: O(n)&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">5
+</span>Enter array elements:
+<span class="in">10 20 30 40 50
+</span>Enter value to search: <span class="in">30
+</span>Element found at index 2
+Time Taken: 0.000001 seconds
+
+Best Case Complexity: O(1)
+Worst Case Complexity: O(n)</pre>
+</div>
+<div class="q" id="q10">
+<p class="qtext">10. Calculate the best and worst complexity of the binary searching algorithm with exact time taken by the algorithm on integer array.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;time.h&gt;
+
+int binarySearch(int arr[], int n, int key)
+{
+    int left = 0;
+    int right = n - 1;
+    while (left &lt;= right)
+    {
+        int mid = left + (right - left) / 2;
+        if (arr[mid] == key)
+            return mid;
+        if (arr[mid] &lt; key)
+            left = mid + 1;
+        else
+            right = mid - 1;
+    }
+    return -1;
+}
+
+int main()
+{
+    int n, key;
+    printf(&quot;Enter size of array: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    int arr[n];
+    printf(&quot;Enter elements in sorted order:\n&quot;);
+    for (int i = 0; i &lt; n; i++)
+        scanf(&quot;%d&quot;, &amp;arr[i]);
+    printf(&quot;Enter value to search: &quot;);
+    scanf(&quot;%d&quot;, &amp;key);
+    clock_t start = clock();
+    int result = binarySearch(arr, n, key);
+    clock_t end = clock();
+    double timeTaken = (double)(end - start) / CLOCKS_PER_SEC;
+    if (result == -1)
+        printf(&quot;Element not found\n&quot;);
+    else
+        printf(&quot;Element found at index %d\n&quot;, result);
+    printf(&quot;Time Taken: %f seconds\n&quot;, timeTaken);
+    printf(&quot;\nBest Case Complexity: O(1)&quot;);
+    printf(&quot;\nWorst Case Complexity: O(log n)&quot;);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter size of array: <span class="in">6
+</span>Enter elements in sorted order:
+<span class="in">5 12 18 25 31 47
+</span>Enter value to search: <span class="in">31
+</span>Element found at index 4
+Time Taken: 0.000001 seconds
+
+Best Case Complexity: O(1)
+Worst Case Complexity: O(log n)</pre>
+</div>
+</div>
+<footer>My Data Structures Website</footer>
+</body></html>

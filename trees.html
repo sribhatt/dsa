@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trees | Data Structures in C</title><style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#1f2a44;background:linear-gradient(180deg,#bcd3ec,#e9f0f8);min-height:100vh}
+nav{background:#5e161f;padding:14px 24px;display:flex;gap:34px}
+nav a{color:#fff;font-weight:bold;font-size:20px;text-decoration:none}
+nav a:hover{text-decoration:underline}
+header{background:#8a5a2e;text-align:center;color:#fff;padding:34px 12px 40px}
+header h1{margin:0 0 26px;font-size:48px}
+header h2{margin:0;font-size:36px}
+.back{display:inline-block;margin:14px 24px;color:#1a4fb4;font-size:22px}
+.card{max-width:1100px;margin:10px auto 40px;background:rgba(255,255,255,.92);border-radius:16px;padding:26px 30px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.card>h2{color:#b08560;font-size:34px;margin:0 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.chips a{background:#8a5a2e;color:#fff;text-decoration:none;border-radius:8px;padding:5px 11px;font-size:14px;font-weight:bold}
+.chips a:hover{background:#5e161f}
+.q{padding:18px 0 8px;border-top:1px solid #e3d6c8;scroll-margin-top:10px}
+.qtext{font-size:21px;font-weight:bold;color:#20305a;margin:6px 0 14px;line-height:1.4}
+h3{margin:14px 0 8px;font-size:22px;color:#222}
+pre{margin:0;border-radius:12px;padding:18px 20px;overflow:auto;font-family:Consolas,Menlo,monospace;font-size:15px;line-height:1.5;tab-size:4}
+pre.code{background:#6f7f69;color:#f4f4e8}
+pre.out{background:#7d8a89;color:#fff;max-height:460px}
+.in{color:#ffe38a;font-weight:bold}
+.wrap{position:relative}
+.copy{position:absolute;top:8px;right:10px;background:rgba(255,255,255,.85);color:#333;border:0;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:13px}
+.note{font-size:13px;color:#555;margin:6px 2px 0}
+footer{text-align:center;padding:26px;color:#fff;background:#5e161f}
+/* home */
+body.home{background:linear-gradient(180deg,#8d4b22 0%,#c19a8e 70%,#b88f84 100%);color:#fff}
+.home h1{text-align:center;font-size:46px;margin:44px 12px 50px}
+.grid{max-width:1150px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px}
+.box{display:block;background:#f6efe9;color:#c4873f;text-decoration:none;text-align:center;font-weight:bold;font-size:22px;padding:30px 12px;border-radius:14px;box-shadow:0 5px 14px rgba(0,0,0,.2);transition:transform .2s,box-shadow .2s,background .2s,color .2s}
+.box small{display:block;margin-top:8px;font-size:14px;font-weight:normal;color:#9b7a55}
+.box:hover{transform:translateY(-6px) scale(1.04);background:#fff;color:#7a3a14;box-shadow:0 12px 26px rgba(0,0,0,.35)}
+.homefoot{text-align:center;margin:60px 0 40px;font-size:16px}
+.page{max-width:800px;margin:30px auto;background:rgba(255,255,255,.92);border-radius:16px;padding:26px 30px}
+@media(max-width:640px){header h1{font-size:30px}header h2{font-size:24px}.qtext{font-size:18px}nav{gap:18px}pre{font-size:13px}}
+</style></head>
+<body><nav><a href="index.html">home</a><a href="about.html">about</a><a href="contact.html">contact</a></nav>
+<header><h1>DATA STRUCTURES</h1><h2>Trees</h2></header>
+<a class="back" href="index.html">&larr; Back to Home</a>
+<div class="card"><h2>Trees Questions</h2>
+<div class="q" id="q1">
+<p class="qtext">1. Construct binary tree from preorder and inorder traversal</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *newNode(int x)
+{
+    struct Node *n = (struct Node *)malloc(sizeof(struct Node));
+    n-&gt;data = x;
+    n-&gt;left = NULL;
+    n-&gt;right = NULL;
+    return n;
+}
+
+/* find position of x in inorder array */
+
+int findIndex(int in[], int start, int end, int x)
+{
+    int i;
+    for (i = start; i &lt;= end; i++)
+    {
+        if (in[i] == x)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/* build tree from preorder and inorder */
+
+struct Node *build(int pre[], int in[], int *pi, int start, int end)
+{
+    int x, k;
+    struct Node *root;
+    if (start &gt; end)
+    {
+        return NULL;
+    }
+    x = pre[*pi];
+    (*pi)++;
+    root = newNode(x);
+    k = findIndex(in, start, end, x);
+    if (k == -1)
+    {
+        return root;
+    }
+    root-&gt;left = build(pre, in, pi, start, k - 1);
+    root-&gt;right = build(pre, in, pi, k + 1, end);
+    return root;
+}
+
+void levelOrder(struct Node *root)
+{
+    struct Node *q[10000];
+    struct Node *cur;
+    int front = 0, rear = 0;
+    if (root == NULL)
+    {
+        return;
+    }
+    q[rear++] = root;
+    while (front &lt; rear)
+    {
+        cur = q[front++];
+        printf(&quot;%d &quot;, cur-&gt;data);
+        if (cur-&gt;left != NULL)
+        {
+            q[rear++] = cur-&gt;left;
+        }
+        if (cur-&gt;right != NULL)
+        {
+            q[rear++] = cur-&gt;right;
+        }
+    }
+}
+
+int main()
+{
+    int n, i, pi = 0;
+    int pre[1000], in[1000];
+    struct Node *root;
+    scanf(&quot;%d&quot;, &amp;n);
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;pre[i]);
+    }
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;in[i]);
+    }
+    root = build(pre, in, &amp;pi, 0, n - 1);
+    levelOrder(root);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">5
+1 2 4 5 3
+4 2 5 1 3
+</span>1 2 3 4 5 </pre>
+</div>
+<div class="q" id="q2">
+<p class="qtext">2. Binary tree level order traversal</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *newNode(int x)
+{
+    struct Node *n = (struct Node *)malloc(sizeof(struct Node));
+    n-&gt;data = x;
+    n-&gt;left = NULL;
+    n-&gt;right = NULL;
+    return n;
+}
+
+int main()
+{
+    int n, x, i, l, r;
+    int front = 0, rear = 0;
+    struct Node **nodes;
+    struct Node *root, *cur;
+    struct Node *q[10000];
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt;= 0)
+    {
+        return 0;
+    }
+    nodes = (struct Node **)malloc(n * sizeof(struct Node *));
+    /* -1 means NULL node */
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;x);
+        if (x == -1)
+        {
+            nodes[i] = NULL;
+        }
+        else
+        {
+            nodes[i] = newNode(x);
+        }
+    }
+    /* connect children: left = 2i+1, right = 2i+2 */
+    for (i = 0; i &lt; n; i++)
+    {
+        if (nodes[i] != NULL)
+        {
+            l = 2 * i + 1;
+            r = 2 * i + 2;
+            if (l &lt; n)
+            {
+                nodes[i]-&gt;left = nodes[l];
+            }
+            if (r &lt; n)
+            {
+                nodes[i]-&gt;right = nodes[r];
+            }
+        }
+    }
+    root = nodes[0];
+    /* level order traversal */
+    if (root != NULL)
+    {
+        q[rear++] = root;
+    }
+    while (front &lt; rear)
+    {
+        cur = q[front++];
+        printf(&quot;%d &quot;, cur-&gt;data);
+        if (cur-&gt;left != NULL)
+        {
+            q[rear++] = cur-&gt;left;
+        }
+        if (cur-&gt;right != NULL)
+        {
+            q[rear++] = cur-&gt;right;
+        }
+    }
+    free(nodes);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">7
+1 2 3 4 5 6 7
+</span>1 2 3 4 5 6 7 </pre>
+</div>
+<div class="q" id="q3">
+<p class="qtext">3. Print left view of binary tree</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *newNode(int x)
+{
+    struct Node *n = (struct Node *)malloc(sizeof(struct Node));
+    n-&gt;data = x;
+    n-&gt;left = NULL;
+    n-&gt;right = NULL;
+    return n;
+}
+
+int main()
+{
+    int n, x, i, count;
+    int f = 0, r = 0;
+    struct Node **a;
+    struct Node *cur;
+    struct Node *q[10000];
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt;= 0)
+    {
+        return 0;
+    }
+    a = (struct Node **)malloc(n * sizeof(struct Node *));
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;x);
+        if (x == -1)
+        {
+            a[i] = NULL;
+        }
+        else
+        {
+            a[i] = newNode(x);
+        }
+    }
+    for (i = 0; i &lt; n; i++)
+    {
+        if (a[i] != NULL)
+        {
+            if (2 * i + 1 &lt; n)
+            {
+                a[i]-&gt;left = a[2 * i + 1];
+            }
+            if (2 * i + 2 &lt; n)
+            {
+                a[i]-&gt;right = a[2 * i + 2];
+            }
+        }
+    }
+    if (a[0] != NULL)
+    {
+        q[r++] = a[0];
+    }
+    /* left view: first node of every level */
+    while (f &lt; r)
+    {
+        count = r - f; /* nodes in current level */
+        printf(&quot;%d &quot;, q[f]-&gt;data);
+        for (i = 0; i &lt; count; i++)
+        {
+            cur = q[f++];
+            if (cur-&gt;left != NULL)
+            {
+                q[r++] = cur-&gt;left;
+            }
+            if (cur-&gt;right != NULL)
+            {
+                q[r++] = cur-&gt;right;
+            }
+        }
+    }
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">7
+1 2 3 4 5 6 7
+</span>1 2 4 </pre>
+</div>
+<div class="q" id="q4">
+<p class="qtext">4. Display the right view of binary tree</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *newNode(int x)
+{
+    struct Node *n = (struct Node *)malloc(sizeof(struct Node));
+    n-&gt;data = x;
+    n-&gt;left = NULL;
+    n-&gt;right = NULL;
+    return n;
+}
+
+int main()
+{
+    int n, x, i, count;
+    int f = 0, r = 0;
+    struct Node **a;
+    struct Node *cur;
+    struct Node *q[10000];
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt;= 0)
+    {
+        return 0;
+    }
+    a = (struct Node **)malloc(n * sizeof(struct Node *));
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;x);
+        if (x == -1)
+        {
+            a[i] = NULL;
+        }
+        else
+        {
+            a[i] = newNode(x);
+        }
+    }
+    for (i = 0; i &lt; n; i++)
+    {
+        if (a[i] != NULL)
+        {
+            if (2 * i + 1 &lt; n)
+            {
+                a[i]-&gt;left = a[2 * i + 1];
+            }
+            if (2 * i + 2 &lt; n)
+            {
+                a[i]-&gt;right = a[2 * i + 2];
+            }
+        }
+    }
+    if (a[0] != NULL)
+    {
+        q[r++] = a[0];
+    }
+    /* right view: last node of every level */
+    while (f &lt; r)
+    {
+        count = r - f; /* nodes in current level */
+        printf(&quot;%d &quot;, q[f + count - 1]-&gt;data);
+        for (i = 0; i &lt; count; i++)
+        {
+            cur = q[f++];
+            if (cur-&gt;left != NULL)
+            {
+                q[r++] = cur-&gt;left;
+            }
+            if (cur-&gt;right != NULL)
+            {
+                q[r++] = cur-&gt;right;
+            }
+        }
+    }
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">7
+1 2 3 4 5 6 7
+</span>1 3 7 </pre>
+</div>
+<div class="q" id="q5">
+<p class="qtext">5. Construct binary tree from postorder and inorder traversal</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *newNode(int x)
+{
+    struct Node *n = (struct Node *)malloc(sizeof(struct Node));
+    n-&gt;data = x;
+    n-&gt;left = NULL;
+    n-&gt;right = NULL;
+    return n;
+}
+
+int findIndex(int in[], int start, int end, int x)
+{
+    int i;
+    for (i = start; i &lt;= end; i++)
+    {
+        if (in[i] == x)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/* build tree from postorder and inorder (postorder is read from the end) */
+
+struct Node *build(int post[], int in[], int *pi, int start, int end)
+{
+    int x, k;
+    struct Node *root;
+    if (start &gt; end)
+    {
+        return NULL;
+    }
+    x = post[*pi];
+    (*pi)--;
+    root = newNode(x);
+    k = findIndex(in, start, end, x);
+    if (k == -1)
+    {
+        return root;
+    }
+    root-&gt;right = build(post, in, pi, k + 1, end); /* right first */
+    root-&gt;left = build(post, in, pi, start, k - 1);
+    return root;
+}
+
+void levelOrder(struct Node *root)
+{
+    struct Node *q[10000];
+    struct Node *cur;
+    int front = 0, rear = 0;
+    if (root == NULL)
+    {
+        return;
+    }
+    q[rear++] = root;
+    while (front &lt; rear)
+    {
+        cur = q[front++];
+        printf(&quot;%d &quot;, cur-&gt;data);
+        if (cur-&gt;left != NULL)
+        {
+            q[rear++] = cur-&gt;left;
+        }
+        if (cur-&gt;right != NULL)
+        {
+            q[rear++] = cur-&gt;right;
+        }
+    }
+}
+
+int main()
+{
+    int n, i, pi;
+    int post[1000], in[1000];
+    struct Node *root;
+    scanf(&quot;%d&quot;, &amp;n);
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;post[i]);
+    }
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;in[i]);
+    }
+    pi = n - 1;
+    root = build(post, in, &amp;pi, 0, n - 1);
+    levelOrder(root);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">5
+4 5 2 3 1
+4 2 5 1 3
+</span>1 2 3 4 5 </pre>
+</div>
+<div class="q" id="q6">
+<p class="qtext">6. Find the maximum depth of binary tree</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *newNode(int x)
+{
+    struct Node *n = (struct Node *)malloc(sizeof(struct Node));
+    n-&gt;data = x;
+    n-&gt;left = NULL;
+    n-&gt;right = NULL;
+    return n;
+}
+
+/* depth (height) of tree */
+
+int depth(struct Node *root)
+{
+    int l, r;
+    if (root == NULL)
+    {
+        return 0;
+    }
+    l = depth(root-&gt;left);
+    r = depth(root-&gt;right);
+    if (l &gt; r)
+    {
+        return 1 + l;
+    }
+    else
+    {
+        return 1 + r;
+    }
+}
+
+int main()
+{
+    int n, x, i;
+    struct Node **a;
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt;= 0)
+    {
+        printf(&quot;0&quot;);
+        return 0;
+    }
+    a = (struct Node **)malloc(n * sizeof(struct Node *));
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;x);
+        if (x == -1)
+        {
+            a[i] = NULL;
+        }
+        else
+        {
+            a[i] = newNode(x);
+        }
+    }
+    for (i = 0; i &lt; n; i++)
+    {
+        if (a[i] != NULL)
+        {
+            if (2 * i + 1 &lt; n)
+            {
+                a[i]-&gt;left = a[2 * i + 1];
+            }
+            if (2 * i + 2 &lt; n)
+            {
+                a[i]-&gt;right = a[2 * i + 2];
+            }
+        }
+    }
+    printf(&quot;%d&quot;, depth(a[0]));
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">7
+1 2 3 4 5 6 7
+</span>3</pre>
+</div>
+<div class="q" id="q7">
+<p class="qtext">7. Create binary search tree using arrays (insert, delete, search, preorder, inorder, postorder, minimum element)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *newNode(int x)
+{
+    struct Node *n = (struct Node *)malloc(sizeof(struct Node));
+    n-&gt;data = x;
+    n-&gt;left = NULL;
+    n-&gt;right = NULL;
+    return n;
+}
+
+struct Node *insert(struct Node *root, int x)
+{
+    if (root == NULL)
+    {
+        return newNode(x);
+    }
+    if (x &lt; root-&gt;data)
+    {
+        root-&gt;left = insert(root-&gt;left, x);
+    }
+    else if (x &gt; root-&gt;data)
+    {
+        root-&gt;right = insert(root-&gt;right, x);
+    }
+    return root;
+}
+
+struct Node *minimum(struct Node *root)
+{
+    while (root != NULL &amp;&amp; root-&gt;left != NULL)
+    {
+        root = root-&gt;left;
+    }
+    return root;
+}
+
+struct Node *deleteNode(struct Node *root, int x)
+{
+    struct Node *t;
+    if (root == NULL)
+    {
+        return NULL;
+    }
+    if (x &lt; root-&gt;data)
+    {
+        root-&gt;left = deleteNode(root-&gt;left, x);
+    }
+    else if (x &gt; root-&gt;data)
+    {
+        root-&gt;right = deleteNode(root-&gt;right, x);
+    }
+    else
+    {
+        /* node with 0 or 1 child */
+        if (root-&gt;left == NULL)
+        {
+            t = root-&gt;right;
+            free(root);
+            return t;
+        }
+        if (root-&gt;right == NULL)
+        {
+            t = root-&gt;left;
+            free(root);
+            return t;
+        }
+        /* node with 2 children: use inorder successor */
+        t = minimum(root-&gt;right);
+        root-&gt;data = t-&gt;data;
+        root-&gt;right = deleteNode(root-&gt;right, t-&gt;data);
+    }
+    return root;
+}
+
+int search(struct Node *root, int x)
+{
+    while (root != NULL)
+    {
+        if (root-&gt;data == x)
+        {
+            return 1;
+        }
+        if (x &lt; root-&gt;data)
+        {
+            root = root-&gt;left;
+        }
+        else
+        {
+            root = root-&gt;right;
+        }
+    }
+    return 0;
+}
+
+void preorder(struct Node *r)
+{
+    if (r != NULL)
+    {
+        printf(&quot;%d &quot;, r-&gt;data);
+        preorder(r-&gt;left);
+        preorder(r-&gt;right);
+    }
+}
+
+void inorder(struct Node *r)
+{
+    if (r != NULL)
+    {
+        inorder(r-&gt;left);
+        printf(&quot;%d &quot;, r-&gt;data);
+        inorder(r-&gt;right);
+    }
+}
+
+void postorder(struct Node *r)
+{
+    if (r != NULL)
+    {
+        postorder(r-&gt;left);
+        postorder(r-&gt;right);
+        printf(&quot;%d &quot;, r-&gt;data);
+    }
+}
+
+int main()
+{
+    struct Node *root = NULL;
+    struct Node *m;
+    int n, x, i, del, key;
+    scanf(&quot;%d&quot;, &amp;n);
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;x);
+        root = insert(root, x);
+    }
+    scanf(&quot;%d%d&quot;, &amp;del, &amp;key);
+    root = deleteNode(root, del);
+    printf(&quot;Preorder: &quot;);
+    preorder(root);
+    printf(&quot;\nInorder: &quot;);
+    inorder(root);
+    printf(&quot;\nPostorder: &quot;);
+    postorder(root);
+    m = minimum(root);
+    if (m != NULL)
+    {
+        printf(&quot;\nMinimum: %d&quot;, m-&gt;data);
+    }
+    else
+    {
+        printf(&quot;\nMinimum: EMPTY&quot;);
+    }
+    if (search(root, key) == 1)
+    {
+        printf(&quot;\nSearch: Found&quot;);
+    }
+    else
+    {
+        printf(&quot;\nSearch: Not Found&quot;);
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">7
+50 30 70 20 40 60 80
+20
+60
+</span>Preorder: 50 30 40 70 60 80 
+Inorder: 30 40 50 60 70 80 
+Postorder: 40 30 60 80 70 50 
+Minimum: 30
+Search: Found</pre>
+</div>
+<div class="q" id="q8">
+<p class="qtext">8. Create binary search tree dynamically (insert, delete, search, preorder, inorder, postorder, minimum element)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *newNode(int x)
+{
+    struct Node *n = (struct Node *)malloc(sizeof(struct Node));
+    n-&gt;data = x;
+    n-&gt;left = NULL;
+    n-&gt;right = NULL;
+    return n;
+}
+
+struct Node *insert(struct Node *root, int x)
+{
+    if (root == NULL)
+    {
+        return newNode(x);
+    }
+    if (x &lt; root-&gt;data)
+    {
+        root-&gt;left = insert(root-&gt;left, x);
+    }
+    else if (x &gt; root-&gt;data)
+    {
+        root-&gt;right = insert(root-&gt;right, x);
+    }
+    return root;
+}
+
+struct Node *minimum(struct Node *root)
+{
+    while (root != NULL &amp;&amp; root-&gt;left != NULL)
+    {
+        root = root-&gt;left;
+    }
+    return root;
+}
+
+struct Node *deleteNode(struct Node *root, int x)
+{
+    struct Node *t;
+    if (root == NULL)
+    {
+        return NULL;
+    }
+    if (x &lt; root-&gt;data)
+    {
+        root-&gt;left = deleteNode(root-&gt;left, x);
+    }
+    else if (x &gt; root-&gt;data)
+    {
+        root-&gt;right = deleteNode(root-&gt;right, x);
+    }
+    else
+    {
+        /* node with 0 or 1 child */
+        if (root-&gt;left == NULL)
+        {
+            t = root-&gt;right;
+            free(root);
+            return t;
+        }
+        if (root-&gt;right == NULL)
+        {
+            t = root-&gt;left;
+            free(root);
+            return t;
+        }
+        /* node with 2 children: use inorder successor */
+        t = minimum(root-&gt;right);
+        root-&gt;data = t-&gt;data;
+        root-&gt;right = deleteNode(root-&gt;right, t-&gt;data);
+    }
+    return root;
+}
+
+int search(struct Node *root, int x)
+{
+    while (root != NULL)
+    {
+        if (root-&gt;data == x)
+        {
+            return 1;
+        }
+        if (x &lt; root-&gt;data)
+        {
+            root = root-&gt;left;
+        }
+        else
+        {
+            root = root-&gt;right;
+        }
+    }
+    return 0;
+}
+
+void preorder(struct Node *r)
+{
+    if (r != NULL)
+    {
+        printf(&quot;%d &quot;, r-&gt;data);
+        preorder(r-&gt;left);
+        preorder(r-&gt;right);
+    }
+}
+
+void inorder(struct Node *r)
+{
+    if (r != NULL)
+    {
+        inorder(r-&gt;left);
+        printf(&quot;%d &quot;, r-&gt;data);
+        inorder(r-&gt;right);
+    }
+}
+
+void postorder(struct Node *r)
+{
+    if (r != NULL)
+    {
+        postorder(r-&gt;left);
+        postorder(r-&gt;right);
+        printf(&quot;%d &quot;, r-&gt;data);
+    }
+}
+
+int main()
+{
+    struct Node *root = NULL;
+    struct Node *m;
+    int n, x, i, del, key;
+    scanf(&quot;%d&quot;, &amp;n);
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;x);
+        root = insert(root, x);
+    }
+    scanf(&quot;%d%d&quot;, &amp;del, &amp;key);
+    root = deleteNode(root, del);
+    printf(&quot;Preorder: &quot;);
+    preorder(root);
+    printf(&quot;\nInorder: &quot;);
+    inorder(root);
+    printf(&quot;\nPostorder: &quot;);
+    postorder(root);
+    m = minimum(root);
+    if (m != NULL)
+    {
+        printf(&quot;\nMinimum: %d&quot;, m-&gt;data);
+    }
+    else
+    {
+        printf(&quot;\nMinimum: EMPTY&quot;);
+    }
+    if (search(root, key) == 1)
+    {
+        printf(&quot;\nSearch: Found&quot;);
+    }
+    else
+    {
+        printf(&quot;\nSearch: Not Found&quot;);
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">7
+50 30 70 20 40 60 80
+20
+60
+</span>Preorder: 50 30 40 70 60 80 
+Inorder: 30 40 50 60 70 80 
+Postorder: 40 30 60 80 70 50 
+Minimum: 30
+Search: Found</pre>
+</div>
+<div class="q" id="q9">
+<p class="qtext">9. Find inorder predecessor and inorder successor of binary search tree (dynamically represented)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *insert(struct Node *r, int x)
+{
+    struct Node *n;
+    if (r == NULL)
+    {
+        n = (struct Node *)malloc(sizeof(struct Node));
+        n-&gt;data = x;
+        n-&gt;left = NULL;
+        n-&gt;right = NULL;
+        return n;
+    }
+    if (x &lt; r-&gt;data)
+    {
+        r-&gt;left = insert(r-&gt;left, x);
+    }
+    else if (x &gt; r-&gt;data)
+    {
+        r-&gt;right = insert(r-&gt;right, x);
+    }
+    return r;
+}
+
+int main()
+{
+    struct Node *root = NULL;
+    struct Node *cur, *pred = NULL, *succ = NULL, *t;
+    int n, x, i, key;
+    scanf(&quot;%d&quot;, &amp;n);
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;x);
+        root = insert(root, x);
+    }
+    scanf(&quot;%d&quot;, &amp;key);
+    cur = root;
+    while (cur != NULL)
+    {
+        if (key &lt; cur-&gt;data)
+        {
+            succ = cur;
+            cur = cur-&gt;left;
+        }
+        else if (key &gt; cur-&gt;data)
+        {
+            pred = cur;
+            cur = cur-&gt;right;
+        }
+        else
+        {
+            /* key found: predecessor = rightmost of left subtree */
+            if (cur-&gt;left != NULL)
+            {
+                t = cur-&gt;left;
+                while (t-&gt;right != NULL)
+                {
+                    t = t-&gt;right;
+                }
+                pred = t;
+            }
+            /* successor = leftmost of right subtree */
+            if (cur-&gt;right != NULL)
+            {
+                t = cur-&gt;right;
+                while (t-&gt;left != NULL)
+                {
+                    t = t-&gt;left;
+                }
+                succ = t;
+            }
+            break;
+        }
+    }
+    if (pred != NULL)
+    {
+        printf(&quot;Predecessor: %d\n&quot;, pred-&gt;data);
+    }
+    else
+    {
+        printf(&quot;Predecessor: NONE\n&quot;);
+    }
+    if (succ != NULL)
+    {
+        printf(&quot;Successor: %d\n&quot;, succ-&gt;data);
+    }
+    else
+    {
+        printf(&quot;Successor: NONE\n&quot;);
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">7
+50 30 70 20 40 60 80
+40
+</span>Predecessor: 30
+Successor: 50</pre>
+</div>
+<div class="q" id="q10">
+<p class="qtext">10. Check whether binary search tree contains dead end</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *insert(struct Node *r, int x)
+{
+    struct Node *n;
+    if (r == NULL)
+    {
+        n = (struct Node *)malloc(sizeof(struct Node));
+        n-&gt;data = x;
+        n-&gt;left = NULL;
+        n-&gt;right = NULL;
+        return n;
+    }
+    if (x &lt; r-&gt;data)
+    {
+        r-&gt;left = insert(r-&gt;left, x);
+    }
+    else if (x &gt; r-&gt;data)
+    {
+        r-&gt;right = insert(r-&gt;right, x);
+    }
+    return r;
+}
+
+/* dead end: no more value can be inserted below a node (low == high) */
+
+int deadEnd(struct Node *r, long long low, long long high)
+{
+    if (r == NULL)
+    {
+        return 0;
+    }
+    if (low == high)
+    {
+        return 1;
+    }
+    return deadEnd(r-&gt;left, low, r-&gt;data - 1) || deadEnd(r-&gt;right, r-&gt;data + 1, high);
+}
+
+int main()
+{
+    struct Node *root = NULL;
+    int n, x, i;
+    scanf(&quot;%d&quot;, &amp;n);
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;x);
+        root = insert(root, x);
+    }
+    if (deadEnd(root, 1, 2147483647LL))
+    {
+        printf(&quot;Dead End Found&quot;);
+    }
+    else
+    {
+        printf(&quot;No Dead End&quot;);
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">6
+8 5 9 2 7 1
+</span>Dead End Found</pre>
+</div>
+<div class="q" id="q11">
+<p class="qtext">11. Create binary tree to binary search tree through array.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *newNode(int x)
+{
+    struct Node *n = (struct Node *)malloc(sizeof(struct Node));
+    n-&gt;data = x;
+    n-&gt;left = NULL;
+    n-&gt;right = NULL;
+    return n;
+}
+
+/* compare function for qsort */
+
+int cmp(const void *a, const void *b)
+{
+    int x = *(const int *)a;
+    int y = *(const int *)b;
+    if (x &gt; y)
+    {
+        return 1;
+    }
+    else if (x &lt; y)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+/* store inorder values in array */
+
+void inorderStore(struct Node *r, int a[], int *i)
+{
+    if (r != NULL)
+    {
+        inorderStore(r-&gt;left, a, i);
+        a[*i] = r-&gt;data;
+        (*i)++;
+        inorderStore(r-&gt;right, a, i);
+    }
+}
+
+/* put sorted values back in inorder */
+
+void inorderFill(struct Node *r, int a[], int *i)
+{
+    if (r != NULL)
+    {
+        inorderFill(r-&gt;left, a, i);
+        r-&gt;data = a[*i];
+        (*i)++;
+        inorderFill(r-&gt;right, a, i);
+    }
+}
+
+void preorder(struct Node *r)
+{
+    if (r != NULL)
+    {
+        printf(&quot;%d &quot;, r-&gt;data);
+        preorder(r-&gt;left);
+        preorder(r-&gt;right);
+    }
+}
+
+int main()
+{
+    int n, x, i, k = 0;
+    int *v;
+    struct Node **a;
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt;= 0)
+    {
+        return 0;
+    }
+    a = (struct Node **)malloc(n * sizeof(struct Node *));
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;x);
+        if (x == -1)
+        {
+            a[i] = NULL;
+        }
+        else
+        {
+            a[i] = newNode(x);
+        }
+    }
+    for (i = 0; i &lt; n; i++)
+    {
+        if (a[i] != NULL)
+        {
+            if (2 * i + 1 &lt; n)
+            {
+                a[i]-&gt;left = a[2 * i + 1];
+            }
+            if (2 * i + 2 &lt; n)
+            {
+                a[i]-&gt;right = a[2 * i + 2];
+            }
+        }
+    }
+    v = (int *)malloc(n * sizeof(int));
+    inorderStore(a[0], v, &amp;k); /* 1. store inorder */
+    qsort(v, k, sizeof(int), cmp); /* 2. sort it */
+    k = 0;
+    inorderFill(a[0], v, &amp;k); /* 3. fill back in inorder */
+    preorder(a[0]);
+    free(v);
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">5
+10 30 15 20 5
+</span>20 10 5 15 30 </pre>
+</div>
+<div class="q" id="q12">
+<p class="qtext">12. Find k-th largest element in binary search tree through array</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *insert(struct Node *r, int x)
+{
+    struct Node *n;
+    if (r == NULL)
+    {
+        n = (struct Node *)malloc(sizeof(struct Node));
+        n-&gt;data = x;
+        n-&gt;left = NULL;
+        n-&gt;right = NULL;
+        return n;
+    }
+    if (x &lt; r-&gt;data)
+    {
+        r-&gt;left = insert(r-&gt;left, x);
+    }
+    else if (x &gt; r-&gt;data)
+    {
+        r-&gt;right = insert(r-&gt;right, x);
+    }
+    return r;
+}
+
+void kthLargest(struct Node *r, int k, int *count, int *ans)
+{
+    if (r == NULL || *count &gt;= k)
+    {
+        return;
+    }
+    kthLargest(r-&gt;right, k, count, ans);
+    (*count)++;
+    if (*count == k)
+    {
+        *ans = r-&gt;data;
+        return;
+    }
+    kthLargest(r-&gt;left, k, count, ans);
+}
+
+int main()
+{
+    struct Node *r = NULL;
+    int n, x, i, k;
+    int c = 0, ans = 0;
+    scanf(&quot;%d&quot;, &amp;n);
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;x);
+        r = insert(r, x);
+    }
+    scanf(&quot;%d&quot;, &amp;k);
+    kthLargest(r, k, &amp;c, &amp;ans);
+    if (c &gt;= k)
+    {
+        printf(&quot;%d&quot;, ans);
+    }
+    else
+    {
+        printf(&quot;Invalid k&quot;);
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">7
+50 30 70 20 40 60 80
+3
+</span>60</pre>
+</div>
+<div class="q" id="q13">
+<p class="qtext">13. Find k-th smallest element in a binary search tree through array</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *insert(struct Node *r, int x)
+{
+    struct Node *n;
+    if (r == NULL)
+    {
+        n = (struct Node *)malloc(sizeof(struct Node));
+        n-&gt;data = x;
+        n-&gt;left = NULL;
+        n-&gt;right = NULL;
+        return n;
+    }
+    if (x &lt; r-&gt;data)
+    {
+        r-&gt;left = insert(r-&gt;left, x);
+    }
+    else if (x &gt; r-&gt;data)
+    {
+        r-&gt;right = insert(r-&gt;right, x);
+    }
+    return r;
+}
+
+void kthSmallest(struct Node *r, int k, int *count, int *ans)
+{
+    if (r == NULL || *count &gt;= k)
+    {
+        return;
+    }
+    kthSmallest(r-&gt;left, k, count, ans);
+    (*count)++;
+    if (*count == k)
+    {
+        *ans = r-&gt;data;
+        return;
+    }
+    kthSmallest(r-&gt;right, k, count, ans);
+}
+
+int main()
+{
+    struct Node *r = NULL;
+    int n, x, i, k;
+    int c = 0, ans = 0;
+    scanf(&quot;%d&quot;, &amp;n);
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;x);
+        r = insert(r, x);
+    }
+    scanf(&quot;%d&quot;, &amp;k);
+    kthSmallest(r, k, &amp;c, &amp;ans);
+    if (c &gt;= k)
+    {
+        printf(&quot;%d&quot;, ans);
+    }
+    else
+    {
+        printf(&quot;Invalid k&quot;);
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">7
+50 30 70 20 40 60 80
+3
+</span>40</pre>
+</div>
+<div class="q" id="q14">
+<p class="qtext">14. Print preorder traversal to postorder traversal of binary search tree</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+
+/* print postorder directly from BST preorder (no tree needed) */
+
+void postorder(int pre[], int *index, int n, long long low, long long high)
+{
+    int x;
+    if (*index &gt;= n)
+    {
+        return;
+    }
+    x = pre[*index];
+    if (x &lt;= low || x &gt;= high)
+    {
+        return;
+    }
+    (*index)++;
+    postorder(pre, index, n, low, x); /* left */
+    postorder(pre, index, n, x, high); /* right */
+    printf(&quot;%d &quot;, x); /* root last */
+}
+
+int main()
+{
+    int n, j, i = 0;
+    int pre[1000];
+    scanf(&quot;%d&quot;, &amp;n);
+    for (j = 0; j &lt; n; j++)
+    {
+        scanf(&quot;%d&quot;, &amp;pre[j]);
+    }
+    postorder(pre, &amp;i, n, LLONG_MIN, LLONG_MAX);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">6
+10 5 1 7 40 50
+</span>1 7 5 50 40 10 </pre>
+</div>
+<div class="q" id="q15">
+<p class="qtext">15. Construct binary search tree from given preorder traversal through arrays</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *make(int x)
+{
+    struct Node *n = (struct Node *)malloc(sizeof(struct Node));
+    n-&gt;data = x;
+    n-&gt;left = NULL;
+    n-&gt;right = NULL;
+    return n;
+}
+
+/* build BST from preorder using value range (low, high) */
+
+struct Node *build(int pre[], int *i, int n, long long low, long long high)
+{
+    int x;
+    struct Node *r;
+    if (*i &gt;= n || pre[*i] &lt;= low || pre[*i] &gt;= high)
+    {
+        return NULL;
+    }
+    x = pre[*i];
+    (*i)++;
+    r = make(x);
+    r-&gt;left = build(pre, i, n, low, x);
+    r-&gt;right = build(pre, i, n, x, high);
+    return r;
+}
+
+void inorder(struct Node *r)
+{
+    if (r != NULL)
+    {
+        inorder(r-&gt;left);
+        printf(&quot;%d &quot;, r-&gt;data);
+        inorder(r-&gt;right);
+    }
+}
+
+void postorder(struct Node *r)
+{
+    if (r != NULL)
+    {
+        postorder(r-&gt;left);
+        postorder(r-&gt;right);
+        printf(&quot;%d &quot;, r-&gt;data);
+    }
+}
+
+int main()
+{
+    int n, j, i = 0;
+    int pre[1000];
+    struct Node *r;
+    scanf(&quot;%d&quot;, &amp;n);
+    for (j = 0; j &lt; n; j++)
+    {
+        scanf(&quot;%d&quot;, &amp;pre[j]);
+    }
+    r = build(pre, &amp;i, n, -2147483649LL, 2147483648LL);
+    printf(&quot;Inorder: &quot;);
+    inorder(r);
+    printf(&quot;\nPostorder: &quot;);
+    postorder(r);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">6
+10 5 1 7 40 50
+</span>Inorder: 1 5 7 10 40 50 
+Postorder: 1 7 5 50 40 10 </pre>
+</div>
+<div class="q" id="q16">
+<p class="qtext">16. Construct binary search tree from given postorder traversal through arrays</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *make(int x)
+{
+    struct Node *n = (struct Node *)malloc(sizeof(struct Node));
+    n-&gt;data = x;
+    n-&gt;left = NULL;
+    n-&gt;right = NULL;
+    return n;
+}
+
+/* build BST from postorder (read from the end: root, right, left) */
+
+struct Node *build(int post[], int *i, long long low, long long high)
+{
+    int x;
+    struct Node *r;
+    if (*i &lt; 0 || post[*i] &lt;= low || post[*i] &gt;= high)
+    {
+        return NULL;
+    }
+    x = post[*i];
+    (*i)--;
+    r = make(x);
+    r-&gt;right = build(post, i, x, high);
+    r-&gt;left = build(post, i, low, x);
+    return r;
+}
+
+void preorder(struct Node *r)
+{
+    if (r != NULL)
+    {
+        printf(&quot;%d &quot;, r-&gt;data);
+        preorder(r-&gt;left);
+        preorder(r-&gt;right);
+    }
+}
+
+void inorder(struct Node *r)
+{
+    if (r != NULL)
+    {
+        inorder(r-&gt;left);
+        printf(&quot;%d &quot;, r-&gt;data);
+        inorder(r-&gt;right);
+    }
+}
+
+int main()
+{
+    int n, j, i;
+    int post[1000];
+    struct Node *r;
+    scanf(&quot;%d&quot;, &amp;n);
+    for (j = 0; j &lt; n; j++)
+    {
+        scanf(&quot;%d&quot;, &amp;post[j]);
+    }
+    i = n - 1;
+    r = build(post, &amp;i, -2147483649LL, 2147483648LL);
+    printf(&quot;Preorder: &quot;);
+    preorder(r);
+    printf(&quot;\nInorder: &quot;);
+    inorder(r);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">6
+1 7 5 50 40 10
+</span>Preorder: 10 5 1 7 40 50 
+Inorder: 1 5 7 10 40 50 </pre>
+</div>
+<div class="q" id="q17">
+<p class="qtext">17. Create strictly binary tree from the given input by the user (dynamically)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+/* create tree by asking children one by one (-1 means NULL) */
+
+struct Node *create()
+{
+    int x;
+    struct Node *n;
+    if (scanf(&quot;%d&quot;, &amp;x) != 1 || x == -1)
+    {
+        return NULL;
+    }
+    n = (struct Node *)malloc(sizeof(struct Node));
+    n-&gt;data = x;
+    printf(&quot;Enter left child of %d (-1 for NULL): &quot;, x);
+    n-&gt;left = create();
+    printf(&quot;Enter right child of %d (-1 for NULL): &quot;, x);
+    n-&gt;right = create();
+    return n;
+}
+
+/* strict binary tree: every node has 0 or 2 children */
+
+int strict(struct Node *r)
+{
+    if (r == NULL)
+    {
+        return 1;
+    }
+    if ((r-&gt;left == NULL &amp;&amp; r-&gt;right != NULL) || (r-&gt;left != NULL &amp;&amp; r-&gt;right == NULL))
+    {
+        return 0;
+    }
+    return strict(r-&gt;left) &amp;&amp; strict(r-&gt;right);
+}
+
+void preorder(struct Node *r)
+{
+    if (r != NULL)
+    {
+        printf(&quot;%d &quot;, r-&gt;data);
+        preorder(r-&gt;left);
+        preorder(r-&gt;right);
+    }
+}
+
+int main()
+{
+    struct Node *r;
+    printf(&quot;Enter root value (-1 for NULL): &quot;);
+    r = create();
+    printf(&quot;Preorder: &quot;);
+    preorder(r);
+    if (strict(r))
+    {
+        printf(&quot;\nStrict binary tree&quot;);
+    }
+    else
+    {
+        printf(&quot;\nNot a strict binary tree&quot;);
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter root value (-1 for NULL): <span class="in">1
+</span>Enter left child of 1 (-1 for NULL): <span class="in">2
+</span>Enter left child of 2 (-1 for NULL): <span class="in">4
+</span>Enter left child of 4 (-1 for NULL): <span class="in">-1
+</span>Enter right child of 4 (-1 for NULL): <span class="in">-1
+</span>Enter right child of 2 (-1 for NULL): <span class="in">5
+</span>Enter left child of 5 (-1 for NULL): <span class="in">-1
+</span>Enter right child of 5 (-1 for NULL): <span class="in">-1
+</span>Enter right child of 1 (-1 for NULL): <span class="in">3
+</span>Enter left child of 3 (-1 for NULL): <span class="in">-1
+</span>Enter right child of 3 (-1 for NULL): <span class="in">-1
+</span>Preorder: 1 2 4 5 3 
+Strict binary tree</pre>
+</div>
+<div class="q" id="q18">
+<p class="qtext">18. Create almost complete binary tree from the given input by the user (dynamically)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *make(int x)
+{
+    struct Node *n = (struct Node *)malloc(sizeof(struct Node));
+    n-&gt;data = x;
+    n-&gt;left = NULL;
+    n-&gt;right = NULL;
+    return n;
+}
+
+void preorder(struct Node *r)
+{
+    if (r != NULL)
+    {
+        printf(&quot;%d &quot;, r-&gt;data);
+        preorder(r-&gt;left);
+        preorder(r-&gt;right);
+    }
+}
+
+int main()
+{
+    int n, x, i;
+    struct Node **a;
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt;= 0)
+    {
+        return 0;
+    }
+    a = (struct Node **)malloc(n * sizeof(struct Node *));
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;x);
+        if (x == -1)
+        {
+            a[i] = NULL;
+        }
+        else
+        {
+            a[i] = make(x);
+        }
+    }
+    for (i = 0; i &lt; n; i++)
+    {
+        if (a[i] != NULL)
+        {
+            if (2 * i + 1 &lt; n)
+            {
+                a[i]-&gt;left = a[2 * i + 1];
+            }
+            if (2 * i + 2 &lt; n)
+            {
+                a[i]-&gt;right = a[2 * i + 2];
+            }
+        }
+    }
+    preorder(a[0]);
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">6
+1 2 3 4 5 6
+</span>1 2 4 5 3 6 </pre>
+</div>
+<div class="q" id="q19">
+<p class="qtext">19. Create complete binary tree from the given input by the user (dynamically)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *make(int x)
+{
+    struct Node *n = (struct Node *)malloc(sizeof(struct Node));
+    n-&gt;data = x;
+    n-&gt;left = NULL;
+    n-&gt;right = NULL;
+    return n;
+}
+
+void preorder(struct Node *r)
+{
+    if (r != NULL)
+    {
+        printf(&quot;%d &quot;, r-&gt;data);
+        preorder(r-&gt;left);
+        preorder(r-&gt;right);
+    }
+}
+
+int main()
+{
+    int n, x, i;
+    struct Node **a;
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &lt;= 0)
+    {
+        return 0;
+    }
+    a = (struct Node **)malloc(n * sizeof(struct Node *));
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;x);
+        if (x == -1)
+        {
+            a[i] = NULL;
+        }
+        else
+        {
+            a[i] = make(x);
+        }
+    }
+    for (i = 0; i &lt; n; i++)
+    {
+        if (a[i] != NULL)
+        {
+            if (2 * i + 1 &lt; n)
+            {
+                a[i]-&gt;left = a[2 * i + 1];
+            }
+            if (2 * i + 2 &lt; n)
+            {
+                a[i]-&gt;right = a[2 * i + 2];
+            }
+        }
+    }
+    preorder(a[0]);
+    free(a);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">7
+1 2 3 4 5 6 7
+</span>1 2 4 5 3 6 7 </pre>
+</div>
+<div class="q" id="q20">
+<p class="qtext">20. Count the number of nodes in binary search tree constructed dynamically</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node *insert(struct Node *r, int x)
+{
+    struct Node *n;
+    if (r == NULL)
+    {
+        n = (struct Node *)malloc(sizeof(struct Node));
+        n-&gt;data = x;
+        n-&gt;left = NULL;
+        n-&gt;right = NULL;
+        return n;
+    }
+    if (x &lt; r-&gt;data)
+    {
+        r-&gt;left = insert(r-&gt;left, x);
+    }
+    else if (x &gt; r-&gt;data)
+    {
+        r-&gt;right = insert(r-&gt;right, x);
+    }
+    return r;
+}
+
+int countNodes(struct Node *r)
+{
+    if (r == NULL)
+    {
+        return 0;
+    }
+    return 1 + countNodes(r-&gt;left) + countNodes(r-&gt;right);
+}
+
+int main()
+{
+    struct Node *r = NULL;
+    int n, x, i;
+    scanf(&quot;%d&quot;, &amp;n);
+    for (i = 0; i &lt; n; i++)
+    {
+        scanf(&quot;%d&quot;, &amp;x);
+        r = insert(r, x);
+    }
+    printf(&quot;%d&quot;, countNodes(r));
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out"><span class="in">7
+50 30 70 20 40 60 80
+</span>7</pre>
+</div>
+</div>
+<footer>My Data Structures Website</footer>
+</body></html>

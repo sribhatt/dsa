@@ -1,0 +1,4319 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linked List | Data Structures in C</title><style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#1f2a44;background:linear-gradient(180deg,#bcd3ec,#e9f0f8);min-height:100vh}
+nav{background:#5e161f;padding:14px 24px;display:flex;gap:34px}
+nav a{color:#fff;font-weight:bold;font-size:20px;text-decoration:none}
+nav a:hover{text-decoration:underline}
+header{background:#8a5a2e;text-align:center;color:#fff;padding:34px 12px 40px}
+header h1{margin:0 0 26px;font-size:48px}
+header h2{margin:0;font-size:36px}
+.back{display:inline-block;margin:14px 24px;color:#1a4fb4;font-size:22px}
+.card{max-width:1100px;margin:10px auto 40px;background:rgba(255,255,255,.92);border-radius:16px;padding:26px 30px;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.card>h2{color:#b08560;font-size:34px;margin:0 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.chips a{background:#8a5a2e;color:#fff;text-decoration:none;border-radius:8px;padding:5px 11px;font-size:14px;font-weight:bold}
+.chips a:hover{background:#5e161f}
+.q{padding:18px 0 8px;border-top:1px solid #e3d6c8;scroll-margin-top:10px}
+.qtext{font-size:21px;font-weight:bold;color:#20305a;margin:6px 0 14px;line-height:1.4}
+h3{margin:14px 0 8px;font-size:22px;color:#222}
+pre{margin:0;border-radius:12px;padding:18px 20px;overflow:auto;font-family:Consolas,Menlo,monospace;font-size:15px;line-height:1.5;tab-size:4}
+pre.code{background:#6f7f69;color:#f4f4e8}
+pre.out{background:#7d8a89;color:#fff;max-height:460px}
+.in{color:#ffe38a;font-weight:bold}
+.wrap{position:relative}
+.copy{position:absolute;top:8px;right:10px;background:rgba(255,255,255,.85);color:#333;border:0;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:13px}
+.note{font-size:13px;color:#555;margin:6px 2px 0}
+footer{text-align:center;padding:26px;color:#fff;background:#5e161f}
+/* home */
+body.home{background:linear-gradient(180deg,#8d4b22 0%,#c19a8e 70%,#b88f84 100%);color:#fff}
+.home h1{text-align:center;font-size:46px;margin:44px 12px 50px}
+.grid{max-width:1150px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px}
+.box{display:block;background:#f6efe9;color:#c4873f;text-decoration:none;text-align:center;font-weight:bold;font-size:22px;padding:30px 12px;border-radius:14px;box-shadow:0 5px 14px rgba(0,0,0,.2);transition:transform .2s,box-shadow .2s,background .2s,color .2s}
+.box small{display:block;margin-top:8px;font-size:14px;font-weight:normal;color:#9b7a55}
+.box:hover{transform:translateY(-6px) scale(1.04);background:#fff;color:#7a3a14;box-shadow:0 12px 26px rgba(0,0,0,.35)}
+.homefoot{text-align:center;margin:60px 0 40px;font-size:16px}
+.page{max-width:800px;margin:30px auto;background:rgba(255,255,255,.92);border-radius:16px;padding:26px 30px}
+@media(max-width:640px){header h1{font-size:30px}header h2{font-size:24px}.qtext{font-size:18px}nav{gap:18px}pre{font-size:13px}}
+</style></head>
+<body><nav><a href="index.html">home</a><a href="about.html">about</a><a href="contact.html">contact</a></nav>
+<header><h1>DATA STRUCTURES</h1><h2>Linked List</h2></header>
+<a class="back" href="index.html">&larr; Back to Home</a>
+<div class="card"><h2>Linked List Questions</h2>
+<div class="q" id="q1">
+<p class="qtext">1. Implement the operations of single linked list storing integer values (insert at begin,insert at pos,insert at end,delete at begin,delete at end, delete at pos, isempty, isfull, display, search)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+struct node *head = NULL;
+
+struct node *createNode(int val)
+{
+    struct node *n = (struct node *)malloc(sizeof(struct node));
+    if (n == NULL)
+        return NULL;
+    n-&gt;data = val;
+    n-&gt;next = NULL;
+    return n;
+}
+
+int isEmpty()
+{
+    return head == NULL;
+}
+
+int isFull()
+{
+    struct node *t = (struct node *)malloc(sizeof(struct node));
+    if (t == NULL)
+        return 1;
+    free(t);
+    return 0;
+}
+
+int count()
+{
+    int c = 0;
+    struct node *t = head;
+    while (t)
+    {
+        c++;
+        t = t-&gt;next;
+    }
+    return c;
+}
+
+void insertBegin(int val)
+{
+    struct node *n;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    n-&gt;next = head;
+    head = n;
+    printf(&quot;Inserted at beginning\n&quot;);
+}
+
+void insertEnd(int val)
+{
+    struct node *n, *t;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    if (head == NULL)
+        head = n;
+    else
+    {
+        t = head;
+        while (t-&gt;next)
+            t = t-&gt;next;
+        t-&gt;next = n;
+    }
+    printf(&quot;Inserted at end\n&quot;);
+}
+
+void insertPos(int val, int pos)
+{
+    struct node *n, *t;
+    int i;
+    if (pos &lt; 1 || pos &gt; count() + 1)
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        insertBegin(val);
+        return;
+    }
+    n = createNode(val);
+    t = head;
+    for (i = 1; i &lt; pos - 1; i++)
+        t = t-&gt;next;
+    n-&gt;next = t-&gt;next;
+    t-&gt;next = n;
+    printf(&quot;Inserted at position %d\n&quot;, pos);
+}
+
+void deleteBegin()
+{
+    struct node *t;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    t = head;
+    head = head-&gt;next;
+    printf(&quot;Deleted: %d\n&quot;, t-&gt;data);
+    free(t);
+}
+
+void deleteEnd()
+{
+    struct node *t, *prev = NULL;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    t = head;
+    while (t-&gt;next)
+    {
+        prev = t;
+        t = t-&gt;next;
+    }
+    if (prev)
+        prev-&gt;next = NULL;
+    else
+        head = NULL;
+    printf(&quot;Deleted: %d\n&quot;, t-&gt;data);
+    free(t);
+}
+
+void deletePos(int pos)
+{
+    struct node *t, *d;
+    int i;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    if (pos &lt; 1 || pos &gt; count())
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        deleteBegin();
+        return;
+    }
+    t = head;
+    for (i = 1; i &lt; pos - 1; i++)
+        t = t-&gt;next;
+    d = t-&gt;next;
+    t-&gt;next = d-&gt;next;
+    printf(&quot;Deleted: %d\n&quot;, d-&gt;data);
+    free(d);
+}
+
+void display()
+{
+    struct node *t = head;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty\n&quot;);
+        return;
+    }
+    printf(&quot;List: &quot;);
+    while (t)
+    {
+        printf(&quot;%d -&gt; &quot;, t-&gt;data);
+        t = t-&gt;next;
+    }
+    printf(&quot;NULL\n&quot;);
+}
+
+void search(int val)
+{
+    struct node *t = head;
+    int pos = 1;
+    while (t)
+    {
+        if (t-&gt;data == val)
+        {
+            printf(&quot;Found at position %d\n&quot;, pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    }
+    printf(&quot;Not found\n&quot;);
+}
+
+int main()
+{
+    int ch, pos;
+    int v;
+    while (1)
+    {
+        printf(&quot;\n1.Insert at begin\n2.Insert at position\n3.Insert at end\n4.Delete at begin\n5.Delete at position\n6.Delete at end\n7.IsEmpty\n8.IsFull\n9.Display\n10.Search\n11.Exit\nEnter choice: &quot;);
+        if (scanf(&quot;%d&quot;, &amp;ch) != 1)
+            break;
+        switch (ch)
+        {
+            case 1:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                insertBegin(v);
+                break;
+            case 2:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                insertPos(v, pos);
+                break;
+            case 3:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                insertEnd(v);
+                break;
+            case 4:
+                deleteBegin();
+                break;
+            case 5:
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                deletePos(pos);
+                break;
+            case 6:
+                deleteEnd();
+                break;
+            case 7:
+                printf(isEmpty() ? &quot;List is empty\n&quot; : &quot;List is not empty\n&quot;);
+                break;
+            case 8:
+                printf(isFull() ? &quot;List is full\n&quot; : &quot;List is not full\n&quot;);
+                break;
+            case 9:
+                display();
+                break;
+            case 10:
+                printf(&quot;Enter value to search: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                search(v);
+                break;
+            case 11:
+                return 0;
+            default:
+                printf(&quot;Invalid choice\n&quot;);
+        }
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">1
+</span>Enter value: <span class="in">10
+</span>Inserted at beginning
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">30
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">40
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">2
+</span>Enter value: <span class="in">20
+</span>Enter position: <span class="in">2
+</span>Inserted at position 2
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: 10 -&gt; 20 -&gt; 30 -&gt; 40 -&gt; NULL
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">10
+</span>Enter value to search: <span class="in">30
+</span>Found at position 3
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">4
+</span>Deleted: 10
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">5
+</span>Enter position: <span class="in">2
+</span>Deleted: 30
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">6
+</span>Deleted: 40
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: 20 -&gt; NULL
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">7
+</span>List is not empty
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">8
+</span>List is not full
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">11
+</span></pre>
+</div>
+<div class="q" id="q2">
+<p class="qtext">2. Implement the operations of single circular linked list storing integer values (insert at begin,insert at pos,insert at end,delete at begin,delete at end, delete at pos, isempty, isfull, display, search)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+struct node *head = NULL;
+
+struct node *createNode(int val)
+{
+    struct node *n = (struct node *)malloc(sizeof(struct node));
+    if (n == NULL)
+        return NULL;
+    n-&gt;data = val;
+    n-&gt;next = n;
+    return n;
+}
+
+int isEmpty()
+{
+    return head == NULL;
+}
+
+int isFull()
+{
+    struct node *t = (struct node *)malloc(sizeof(struct node));
+    if (t == NULL)
+        return 1;
+    free(t);
+    return 0;
+}
+
+int count()
+{
+    int c = 0;
+    struct node *t = head;
+    if (head == NULL)
+        return 0;
+    do
+    {
+        c++;
+        t = t-&gt;next;
+    } while (t != head);
+    return c;
+}
+
+void insertBegin(int val)
+{
+    struct node *n, *last;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    if (head == NULL)
+        head = n;
+    else
+    {
+        last = head;
+        while (last-&gt;next != head)
+            last = last-&gt;next;
+        n-&gt;next = head;
+        last-&gt;next = n;
+        head = n;
+    }
+    printf(&quot;Inserted at beginning\n&quot;);
+}
+
+void insertEnd(int val)
+{
+    struct node *n, *last;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    if (head == NULL)
+        head = n;
+    else
+    {
+        last = head;
+        while (last-&gt;next != head)
+            last = last-&gt;next;
+        last-&gt;next = n;
+        n-&gt;next = head;
+    }
+    printf(&quot;Inserted at end\n&quot;);
+}
+
+void insertPos(int val, int pos)
+{
+    struct node *n, *t;
+    int i;
+    if (pos &lt; 1 || pos &gt; count() + 1)
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        insertBegin(val);
+        return;
+    }
+    n = createNode(val);
+    t = head;
+    for (i = 1; i &lt; pos - 1; i++)
+        t = t-&gt;next;
+    n-&gt;next = t-&gt;next;
+    t-&gt;next = n;
+    printf(&quot;Inserted at position %d\n&quot;, pos);
+}
+
+void deleteBegin()
+{
+    struct node *t, *last;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    t = head;
+    printf(&quot;Deleted: %d\n&quot;, t-&gt;data);
+    if (head-&gt;next == head)
+        head = NULL;
+    else
+    {
+        last = head;
+        while (last-&gt;next != head)
+            last = last-&gt;next;
+        head = head-&gt;next;
+        last-&gt;next = head;
+    }
+    free(t);
+}
+
+void deleteEnd()
+{
+    struct node *t;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    if (head-&gt;next == head)
+    {
+        printf(&quot;Deleted: %d\n&quot;, head-&gt;data);
+        free(head);
+        head = NULL;
+        return;
+    }
+    t = head;
+    while (t-&gt;next-&gt;next != head)
+        t = t-&gt;next;
+    printf(&quot;Deleted: %d\n&quot;, t-&gt;next-&gt;data);
+    free(t-&gt;next);
+    t-&gt;next = head;
+}
+
+void deletePos(int pos)
+{
+    struct node *t, *d;
+    int i;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    if (pos &lt; 1 || pos &gt; count())
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        deleteBegin();
+        return;
+    }
+    t = head;
+    for (i = 1; i &lt; pos - 1; i++)
+        t = t-&gt;next;
+    d = t-&gt;next;
+    t-&gt;next = d-&gt;next;
+    printf(&quot;Deleted: %d\n&quot;, d-&gt;data);
+    free(d);
+}
+
+void display()
+{
+    struct node *t = head;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty\n&quot;);
+        return;
+    }
+    printf(&quot;List: &quot;);
+    do
+    {
+        printf(&quot;%d -&gt; &quot;, t-&gt;data);
+        t = t-&gt;next;
+    } while (t != head);
+    printf(&quot;(back to head)\n&quot;);
+}
+
+void search(int val)
+{
+    struct node *t = head;
+    int pos = 1;
+    if (head == NULL)
+    {
+        printf(&quot;List is empty\n&quot;);
+        return;
+    }
+    do
+    {
+        if (t-&gt;data == val)
+        {
+            printf(&quot;Found at position %d\n&quot;, pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    } while (t != head);
+    printf(&quot;Not found\n&quot;);
+}
+
+int main()
+{
+    int ch, pos;
+    int v;
+    while (1)
+    {
+        printf(&quot;\n1.Insert at begin\n2.Insert at position\n3.Insert at end\n4.Delete at begin\n5.Delete at position\n6.Delete at end\n7.IsEmpty\n8.IsFull\n9.Display\n10.Search\n11.Exit\nEnter choice: &quot;);
+        if (scanf(&quot;%d&quot;, &amp;ch) != 1)
+            break;
+        switch (ch)
+        {
+            case 1:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                insertBegin(v);
+                break;
+            case 2:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                insertPos(v, pos);
+                break;
+            case 3:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                insertEnd(v);
+                break;
+            case 4:
+                deleteBegin();
+                break;
+            case 5:
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                deletePos(pos);
+                break;
+            case 6:
+                deleteEnd();
+                break;
+            case 7:
+                printf(isEmpty() ? &quot;List is empty\n&quot; : &quot;List is not empty\n&quot;);
+                break;
+            case 8:
+                printf(isFull() ? &quot;List is full\n&quot; : &quot;List is not full\n&quot;);
+                break;
+            case 9:
+                display();
+                break;
+            case 10:
+                printf(&quot;Enter value to search: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                search(v);
+                break;
+            case 11:
+                return 0;
+            default:
+                printf(&quot;Invalid choice\n&quot;);
+        }
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">1
+</span>Enter value: <span class="in">10
+</span>Inserted at beginning
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">30
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">40
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">2
+</span>Enter value: <span class="in">20
+</span>Enter position: <span class="in">2
+</span>Inserted at position 2
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: 10 -&gt; 20 -&gt; 30 -&gt; 40 -&gt; (back to head)
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">10
+</span>Enter value to search: <span class="in">30
+</span>Found at position 3
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">4
+</span>Deleted: 10
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">5
+</span>Enter position: <span class="in">2
+</span>Deleted: 30
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">6
+</span>Deleted: 40
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: 20 -&gt; (back to head)
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">7
+</span>List is not empty
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">8
+</span>List is not full
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">11
+</span></pre>
+</div>
+<div class="q" id="q3">
+<p class="qtext">3. Implement the operations of doubly linked list storing integer values (insert at begin,insert at pos,insert at end,delete at begin,delete at end, delete at pos, isempty, isfull, display, search)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct node
+{
+    int data;
+    struct node *prev, *next;
+};
+
+struct node *head = NULL;
+
+struct node *createNode(int val)
+{
+    struct node *n = (struct node *)malloc(sizeof(struct node));
+    if (n == NULL)
+        return NULL;
+    n-&gt;data = val;
+    n-&gt;prev = n-&gt;next = NULL;
+    return n;
+}
+
+int isEmpty()
+{
+    return head == NULL;
+}
+
+int isFull()
+{
+    struct node *t = (struct node *)malloc(sizeof(struct node));
+    if (t == NULL)
+        return 1;
+    free(t);
+    return 0;
+}
+
+int count()
+{
+    int c = 0;
+    struct node *t = head;
+    while (t)
+    {
+        c++;
+        t = t-&gt;next;
+    }
+    return c;
+}
+
+void insertBegin(int val)
+{
+    struct node *n;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    n-&gt;next = head;
+    if (head)
+        head-&gt;prev = n;
+    head = n;
+    printf(&quot;Inserted at beginning\n&quot;);
+}
+
+void insertEnd(int val)
+{
+    struct node *n, *t;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    if (head == NULL)
+        head = n;
+    else
+    {
+        t = head;
+        while (t-&gt;next)
+            t = t-&gt;next;
+        t-&gt;next = n;
+        n-&gt;prev = t;
+    }
+    printf(&quot;Inserted at end\n&quot;);
+}
+
+void insertPos(int val, int pos)
+{
+    struct node *n, *t;
+    int i;
+    if (pos &lt; 1 || pos &gt; count() + 1)
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        insertBegin(val);
+        return;
+    }
+    n = createNode(val);
+    t = head;
+    for (i = 1; i &lt; pos - 1; i++)
+        t = t-&gt;next;
+    n-&gt;next = t-&gt;next;
+    n-&gt;prev = t;
+    if (t-&gt;next)
+        t-&gt;next-&gt;prev = n;
+    t-&gt;next = n;
+    printf(&quot;Inserted at position %d\n&quot;, pos);
+}
+
+void deleteBegin()
+{
+    struct node *t;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    t = head;
+    head = head-&gt;next;
+    if (head)
+        head-&gt;prev = NULL;
+    printf(&quot;Deleted: %d\n&quot;, t-&gt;data);
+    free(t);
+}
+
+void deleteEnd()
+{
+    struct node *t;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    t = head;
+    while (t-&gt;next)
+        t = t-&gt;next;
+    if (t-&gt;prev)
+        t-&gt;prev-&gt;next = NULL;
+    else
+        head = NULL;
+    printf(&quot;Deleted: %d\n&quot;, t-&gt;data);
+    free(t);
+}
+
+void deletePos(int pos)
+{
+    struct node *t;
+    int i;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    if (pos &lt; 1 || pos &gt; count())
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        deleteBegin();
+        return;
+    }
+    t = head;
+    for (i = 1; i &lt; pos; i++)
+        t = t-&gt;next;
+    t-&gt;prev-&gt;next = t-&gt;next;
+    if (t-&gt;next)
+        t-&gt;next-&gt;prev = t-&gt;prev;
+    printf(&quot;Deleted: %d\n&quot;, t-&gt;data);
+    free(t);
+}
+
+void display()
+{
+    struct node *t = head;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty\n&quot;);
+        return;
+    }
+    printf(&quot;List: NULL &lt;-&gt; &quot;);
+    while (t)
+    {
+        printf(&quot;%d &lt;-&gt; &quot;, t-&gt;data);
+        t = t-&gt;next;
+    }
+    printf(&quot;NULL\n&quot;);
+}
+
+void search(int val)
+{
+    struct node *t = head;
+    int pos = 1;
+    while (t)
+    {
+        if (t-&gt;data == val)
+        {
+            printf(&quot;Found at position %d\n&quot;, pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    }
+    printf(&quot;Not found\n&quot;);
+}
+
+int main()
+{
+    int ch, pos;
+    int v;
+    while (1)
+    {
+        printf(&quot;\n1.Insert at begin\n2.Insert at position\n3.Insert at end\n4.Delete at begin\n5.Delete at position\n6.Delete at end\n7.IsEmpty\n8.IsFull\n9.Display\n10.Search\n11.Exit\nEnter choice: &quot;);
+        if (scanf(&quot;%d&quot;, &amp;ch) != 1)
+            break;
+        switch (ch)
+        {
+            case 1:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                insertBegin(v);
+                break;
+            case 2:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                insertPos(v, pos);
+                break;
+            case 3:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                insertEnd(v);
+                break;
+            case 4:
+                deleteBegin();
+                break;
+            case 5:
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                deletePos(pos);
+                break;
+            case 6:
+                deleteEnd();
+                break;
+            case 7:
+                printf(isEmpty() ? &quot;List is empty\n&quot; : &quot;List is not empty\n&quot;);
+                break;
+            case 8:
+                printf(isFull() ? &quot;List is full\n&quot; : &quot;List is not full\n&quot;);
+                break;
+            case 9:
+                display();
+                break;
+            case 10:
+                printf(&quot;Enter value to search: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                search(v);
+                break;
+            case 11:
+                return 0;
+            default:
+                printf(&quot;Invalid choice\n&quot;);
+        }
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">1
+</span>Enter value: <span class="in">10
+</span>Inserted at beginning
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">30
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">40
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">2
+</span>Enter value: <span class="in">20
+</span>Enter position: <span class="in">2
+</span>Inserted at position 2
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: NULL &lt;-&gt; 10 &lt;-&gt; 20 &lt;-&gt; 30 &lt;-&gt; 40 &lt;-&gt; NULL
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">10
+</span>Enter value to search: <span class="in">30
+</span>Found at position 3
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">4
+</span>Deleted: 10
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">5
+</span>Enter position: <span class="in">2
+</span>Deleted: 30
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">6
+</span>Deleted: 40
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: NULL &lt;-&gt; 20 &lt;-&gt; NULL
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">7
+</span>List is not empty
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">8
+</span>List is not full
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">11
+</span></pre>
+</div>
+<div class="q" id="q4">
+<p class="qtext">4. Implement the operations of doubly circular linked list storing integer values (insert at begin,insert at pos,insert at end,delete at begin,delete at end, delete at pos, isempty, isfull, display, search)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct node
+{
+    int data;
+    struct node *prev, *next;
+};
+
+struct node *head = NULL;
+
+struct node *createNode(int val)
+{
+    struct node *n = (struct node *)malloc(sizeof(struct node));
+    if (n == NULL)
+        return NULL;
+    n-&gt;data = val;
+    n-&gt;prev = n-&gt;next = n;
+    return n;
+}
+
+int isEmpty()
+{
+    return head == NULL;
+}
+
+int isFull()
+{
+    struct node *t = (struct node *)malloc(sizeof(struct node));
+    if (t == NULL)
+        return 1;
+    free(t);
+    return 0;
+}
+
+int count()
+{
+    int c = 0;
+    struct node *t = head;
+    if (head == NULL)
+        return 0;
+    do
+    {
+        c++;
+        t = t-&gt;next;
+    } while (t != head);
+    return c;
+}
+
+void insertBegin(int val)
+{
+    struct node *n, *last;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    if (head == NULL)
+        head = n;
+    else
+    {
+        last = head-&gt;prev;
+        n-&gt;next = head;
+        n-&gt;prev = last;
+        last-&gt;next = n;
+        head-&gt;prev = n;
+        head = n;
+    }
+    printf(&quot;Inserted at beginning\n&quot;);
+}
+
+void insertEnd(int val)
+{
+    struct node *n, *last;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    if (head == NULL)
+        head = n;
+    else
+    {
+        last = head-&gt;prev;
+        n-&gt;next = head;
+        n-&gt;prev = last;
+        last-&gt;next = n;
+        head-&gt;prev = n;
+    }
+    printf(&quot;Inserted at end\n&quot;);
+}
+
+void insertPos(int val, int pos)
+{
+    struct node *n, *t;
+    int i;
+    if (pos &lt; 1 || pos &gt; count() + 1)
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        insertBegin(val);
+        return;
+    }
+    n = createNode(val);
+    t = head;
+    for (i = 1; i &lt; pos - 1; i++)
+        t = t-&gt;next;
+    n-&gt;next = t-&gt;next;
+    n-&gt;prev = t;
+    t-&gt;next-&gt;prev = n;
+    t-&gt;next = n;
+    printf(&quot;Inserted at position %d\n&quot;, pos);
+}
+
+void deleteBegin()
+{
+    struct node *t, *last;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    t = head;
+    printf(&quot;Deleted: %d\n&quot;, t-&gt;data);
+    if (head-&gt;next == head)
+        head = NULL;
+    else
+    {
+        last = head-&gt;prev;
+        head = head-&gt;next;
+        head-&gt;prev = last;
+        last-&gt;next = head;
+    }
+    free(t);
+}
+
+void deleteEnd()
+{
+    struct node *t;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    t = head-&gt;prev;
+    printf(&quot;Deleted: %d\n&quot;, t-&gt;data);
+    if (t == head)
+        head = NULL;
+    else
+    {
+        t-&gt;prev-&gt;next = head;
+        head-&gt;prev = t-&gt;prev;
+    }
+    free(t);
+}
+
+void deletePos(int pos)
+{
+    struct node *t;
+    int i;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    if (pos &lt; 1 || pos &gt; count())
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        deleteBegin();
+        return;
+    }
+    t = head;
+    for (i = 1; i &lt; pos; i++)
+        t = t-&gt;next;
+    t-&gt;prev-&gt;next = t-&gt;next;
+    t-&gt;next-&gt;prev = t-&gt;prev;
+    printf(&quot;Deleted: %d\n&quot;, t-&gt;data);
+    free(t);
+}
+
+void display()
+{
+    struct node *t = head;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty\n&quot;);
+        return;
+    }
+    printf(&quot;List: &quot;);
+    do
+    {
+        printf(&quot;%d &lt;-&gt; &quot;, t-&gt;data);
+        t = t-&gt;next;
+    } while (t != head);
+    printf(&quot;(back to head)\n&quot;);
+}
+
+void search(int val)
+{
+    struct node *t = head;
+    int pos = 1;
+    if (head == NULL)
+    {
+        printf(&quot;List is empty\n&quot;);
+        return;
+    }
+    do
+    {
+        if (t-&gt;data == val)
+        {
+            printf(&quot;Found at position %d\n&quot;, pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    } while (t != head);
+    printf(&quot;Not found\n&quot;);
+}
+
+int main()
+{
+    int ch, pos;
+    int v;
+    while (1)
+    {
+        printf(&quot;\n1.Insert at begin\n2.Insert at position\n3.Insert at end\n4.Delete at begin\n5.Delete at position\n6.Delete at end\n7.IsEmpty\n8.IsFull\n9.Display\n10.Search\n11.Exit\nEnter choice: &quot;);
+        if (scanf(&quot;%d&quot;, &amp;ch) != 1)
+            break;
+        switch (ch)
+        {
+            case 1:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                insertBegin(v);
+                break;
+            case 2:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                insertPos(v, pos);
+                break;
+            case 3:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                insertEnd(v);
+                break;
+            case 4:
+                deleteBegin();
+                break;
+            case 5:
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                deletePos(pos);
+                break;
+            case 6:
+                deleteEnd();
+                break;
+            case 7:
+                printf(isEmpty() ? &quot;List is empty\n&quot; : &quot;List is not empty\n&quot;);
+                break;
+            case 8:
+                printf(isFull() ? &quot;List is full\n&quot; : &quot;List is not full\n&quot;);
+                break;
+            case 9:
+                display();
+                break;
+            case 10:
+                printf(&quot;Enter value to search: &quot;);
+                scanf(&quot;%d&quot;, &amp;v);
+                search(v);
+                break;
+            case 11:
+                return 0;
+            default:
+                printf(&quot;Invalid choice\n&quot;);
+        }
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">1
+</span>Enter value: <span class="in">10
+</span>Inserted at beginning
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">30
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">40
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">2
+</span>Enter value: <span class="in">20
+</span>Enter position: <span class="in">2
+</span>Inserted at position 2
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: 10 &lt;-&gt; 20 &lt;-&gt; 30 &lt;-&gt; 40 &lt;-&gt; (back to head)
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">10
+</span>Enter value to search: <span class="in">30
+</span>Found at position 3
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">4
+</span>Deleted: 10
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">5
+</span>Enter position: <span class="in">2
+</span>Deleted: 30
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">6
+</span>Deleted: 40
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: 20 &lt;-&gt; (back to head)
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">7
+</span>List is not empty
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">8
+</span>List is not full
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">11
+</span></pre>
+</div>
+<div class="q" id="q5">
+<p class="qtext">5. Implement the operations of single linked list storing string values (insert at begin,insert at pos,insert at end,delete at begin,delete at end, delete at pos, isempty, isfull, display, search)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+struct node
+{
+    char data[50];
+    struct node *next;
+};
+
+struct node *head = NULL;
+
+struct node *createNode(const char *val)
+{
+    struct node *n = (struct node *)malloc(sizeof(struct node));
+    if (n == NULL)
+        return NULL;
+    strcpy(n-&gt;data, val);
+    n-&gt;next = NULL;
+    return n;
+}
+
+int isEmpty()
+{
+    return head == NULL;
+}
+
+int isFull()
+{
+    struct node *t = (struct node *)malloc(sizeof(struct node));
+    if (t == NULL)
+        return 1;
+    free(t);
+    return 0;
+}
+
+int count()
+{
+    int c = 0;
+    struct node *t = head;
+    while (t)
+    {
+        c++;
+        t = t-&gt;next;
+    }
+    return c;
+}
+
+void insertBegin(const char *val)
+{
+    struct node *n;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    n-&gt;next = head;
+    head = n;
+    printf(&quot;Inserted at beginning\n&quot;);
+}
+
+void insertEnd(const char *val)
+{
+    struct node *n, *t;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    if (head == NULL)
+        head = n;
+    else
+    {
+        t = head;
+        while (t-&gt;next)
+            t = t-&gt;next;
+        t-&gt;next = n;
+    }
+    printf(&quot;Inserted at end\n&quot;);
+}
+
+void insertPos(const char *val, int pos)
+{
+    struct node *n, *t;
+    int i;
+    if (pos &lt; 1 || pos &gt; count() + 1)
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        insertBegin(val);
+        return;
+    }
+    n = createNode(val);
+    t = head;
+    for (i = 1; i &lt; pos - 1; i++)
+        t = t-&gt;next;
+    n-&gt;next = t-&gt;next;
+    t-&gt;next = n;
+    printf(&quot;Inserted at position %d\n&quot;, pos);
+}
+
+void deleteBegin()
+{
+    struct node *t;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    t = head;
+    head = head-&gt;next;
+    printf(&quot;Deleted: %s\n&quot;, t-&gt;data);
+    free(t);
+}
+
+void deleteEnd()
+{
+    struct node *t, *prev = NULL;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    t = head;
+    while (t-&gt;next)
+    {
+        prev = t;
+        t = t-&gt;next;
+    }
+    if (prev)
+        prev-&gt;next = NULL;
+    else
+        head = NULL;
+    printf(&quot;Deleted: %s\n&quot;, t-&gt;data);
+    free(t);
+}
+
+void deletePos(int pos)
+{
+    struct node *t, *d;
+    int i;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    if (pos &lt; 1 || pos &gt; count())
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        deleteBegin();
+        return;
+    }
+    t = head;
+    for (i = 1; i &lt; pos - 1; i++)
+        t = t-&gt;next;
+    d = t-&gt;next;
+    t-&gt;next = d-&gt;next;
+    printf(&quot;Deleted: %s\n&quot;, d-&gt;data);
+    free(d);
+}
+
+void display()
+{
+    struct node *t = head;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty\n&quot;);
+        return;
+    }
+    printf(&quot;List: &quot;);
+    while (t)
+    {
+        printf(&quot;%s -&gt; &quot;, t-&gt;data);
+        t = t-&gt;next;
+    }
+    printf(&quot;NULL\n&quot;);
+}
+
+void search(const char *val)
+{
+    struct node *t = head;
+    int pos = 1;
+    while (t)
+    {
+        if (strcmp(t-&gt;data, val) == 0)
+        {
+            printf(&quot;Found at position %d\n&quot;, pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    }
+    printf(&quot;Not found\n&quot;);
+}
+
+int main()
+{
+    int ch, pos;
+    char v[50];
+    while (1)
+    {
+        printf(&quot;\n1.Insert at begin\n2.Insert at position\n3.Insert at end\n4.Delete at begin\n5.Delete at position\n6.Delete at end\n7.IsEmpty\n8.IsFull\n9.Display\n10.Search\n11.Exit\nEnter choice: &quot;);
+        if (scanf(&quot;%d&quot;, &amp;ch) != 1)
+            break;
+        switch (ch)
+        {
+            case 1:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                insertBegin(v);
+                break;
+            case 2:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                insertPos(v, pos);
+                break;
+            case 3:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                insertEnd(v);
+                break;
+            case 4:
+                deleteBegin();
+                break;
+            case 5:
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                deletePos(pos);
+                break;
+            case 6:
+                deleteEnd();
+                break;
+            case 7:
+                printf(isEmpty() ? &quot;List is empty\n&quot; : &quot;List is not empty\n&quot;);
+                break;
+            case 8:
+                printf(isFull() ? &quot;List is full\n&quot; : &quot;List is not full\n&quot;);
+                break;
+            case 9:
+                display();
+                break;
+            case 10:
+                printf(&quot;Enter value to search: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                search(v);
+                break;
+            case 11:
+                return 0;
+            default:
+                printf(&quot;Invalid choice\n&quot;);
+        }
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">1
+</span>Enter value: <span class="in">Ram
+</span>Inserted at beginning
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">Shyam
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">Mohan
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">2
+</span>Enter value: <span class="in">Geeta
+</span>Enter position: <span class="in">2
+</span>Inserted at position 2
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: Ram -&gt; Geeta -&gt; Shyam -&gt; Mohan -&gt; NULL
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">10
+</span>Enter value to search: <span class="in">Shyam
+</span>Found at position 3
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">4
+</span>Deleted: Ram
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">5
+</span>Enter position: <span class="in">2
+</span>Deleted: Shyam
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">6
+</span>Deleted: Mohan
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: Geeta -&gt; NULL
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">7
+</span>List is not empty
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">8
+</span>List is not full
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">11
+</span></pre>
+</div>
+<div class="q" id="q6">
+<p class="qtext">6. Implement the operations of single circular linked list storing string values (insert at begin,insert at pos,insert at end,delete at begin,delete at end, delete at pos, isempty, isfull, display, search)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+struct node
+{
+    char data[50];
+    struct node *next;
+};
+
+struct node *head = NULL;
+
+struct node *createNode(const char *val)
+{
+    struct node *n = (struct node *)malloc(sizeof(struct node));
+    if (n == NULL)
+        return NULL;
+    strcpy(n-&gt;data, val);
+    n-&gt;next = n;
+    return n;
+}
+
+int isEmpty()
+{
+    return head == NULL;
+}
+
+int isFull()
+{
+    struct node *t = (struct node *)malloc(sizeof(struct node));
+    if (t == NULL)
+        return 1;
+    free(t);
+    return 0;
+}
+
+int count()
+{
+    int c = 0;
+    struct node *t = head;
+    if (head == NULL)
+        return 0;
+    do
+    {
+        c++;
+        t = t-&gt;next;
+    } while (t != head);
+    return c;
+}
+
+void insertBegin(const char *val)
+{
+    struct node *n, *last;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    if (head == NULL)
+        head = n;
+    else
+    {
+        last = head;
+        while (last-&gt;next != head)
+            last = last-&gt;next;
+        n-&gt;next = head;
+        last-&gt;next = n;
+        head = n;
+    }
+    printf(&quot;Inserted at beginning\n&quot;);
+}
+
+void insertEnd(const char *val)
+{
+    struct node *n, *last;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    if (head == NULL)
+        head = n;
+    else
+    {
+        last = head;
+        while (last-&gt;next != head)
+            last = last-&gt;next;
+        last-&gt;next = n;
+        n-&gt;next = head;
+    }
+    printf(&quot;Inserted at end\n&quot;);
+}
+
+void insertPos(const char *val, int pos)
+{
+    struct node *n, *t;
+    int i;
+    if (pos &lt; 1 || pos &gt; count() + 1)
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        insertBegin(val);
+        return;
+    }
+    n = createNode(val);
+    t = head;
+    for (i = 1; i &lt; pos - 1; i++)
+        t = t-&gt;next;
+    n-&gt;next = t-&gt;next;
+    t-&gt;next = n;
+    printf(&quot;Inserted at position %d\n&quot;, pos);
+}
+
+void deleteBegin()
+{
+    struct node *t, *last;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    t = head;
+    printf(&quot;Deleted: %s\n&quot;, t-&gt;data);
+    if (head-&gt;next == head)
+        head = NULL;
+    else
+    {
+        last = head;
+        while (last-&gt;next != head)
+            last = last-&gt;next;
+        head = head-&gt;next;
+        last-&gt;next = head;
+    }
+    free(t);
+}
+
+void deleteEnd()
+{
+    struct node *t;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    if (head-&gt;next == head)
+    {
+        printf(&quot;Deleted: %s\n&quot;, head-&gt;data);
+        free(head);
+        head = NULL;
+        return;
+    }
+    t = head;
+    while (t-&gt;next-&gt;next != head)
+        t = t-&gt;next;
+    printf(&quot;Deleted: %s\n&quot;, t-&gt;next-&gt;data);
+    free(t-&gt;next);
+    t-&gt;next = head;
+}
+
+void deletePos(int pos)
+{
+    struct node *t, *d;
+    int i;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    if (pos &lt; 1 || pos &gt; count())
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        deleteBegin();
+        return;
+    }
+    t = head;
+    for (i = 1; i &lt; pos - 1; i++)
+        t = t-&gt;next;
+    d = t-&gt;next;
+    t-&gt;next = d-&gt;next;
+    printf(&quot;Deleted: %s\n&quot;, d-&gt;data);
+    free(d);
+}
+
+void display()
+{
+    struct node *t = head;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty\n&quot;);
+        return;
+    }
+    printf(&quot;List: &quot;);
+    do
+    {
+        printf(&quot;%s -&gt; &quot;, t-&gt;data);
+        t = t-&gt;next;
+    } while (t != head);
+    printf(&quot;(back to head)\n&quot;);
+}
+
+void search(const char *val)
+{
+    struct node *t = head;
+    int pos = 1;
+    if (head == NULL)
+    {
+        printf(&quot;List is empty\n&quot;);
+        return;
+    }
+    do
+    {
+        if (strcmp(t-&gt;data, val) == 0)
+        {
+            printf(&quot;Found at position %d\n&quot;, pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    } while (t != head);
+    printf(&quot;Not found\n&quot;);
+}
+
+int main()
+{
+    int ch, pos;
+    char v[50];
+    while (1)
+    {
+        printf(&quot;\n1.Insert at begin\n2.Insert at position\n3.Insert at end\n4.Delete at begin\n5.Delete at position\n6.Delete at end\n7.IsEmpty\n8.IsFull\n9.Display\n10.Search\n11.Exit\nEnter choice: &quot;);
+        if (scanf(&quot;%d&quot;, &amp;ch) != 1)
+            break;
+        switch (ch)
+        {
+            case 1:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                insertBegin(v);
+                break;
+            case 2:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                insertPos(v, pos);
+                break;
+            case 3:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                insertEnd(v);
+                break;
+            case 4:
+                deleteBegin();
+                break;
+            case 5:
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                deletePos(pos);
+                break;
+            case 6:
+                deleteEnd();
+                break;
+            case 7:
+                printf(isEmpty() ? &quot;List is empty\n&quot; : &quot;List is not empty\n&quot;);
+                break;
+            case 8:
+                printf(isFull() ? &quot;List is full\n&quot; : &quot;List is not full\n&quot;);
+                break;
+            case 9:
+                display();
+                break;
+            case 10:
+                printf(&quot;Enter value to search: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                search(v);
+                break;
+            case 11:
+                return 0;
+            default:
+                printf(&quot;Invalid choice\n&quot;);
+        }
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">1
+</span>Enter value: <span class="in">Ram
+</span>Inserted at beginning
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">Shyam
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">Mohan
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">2
+</span>Enter value: <span class="in">Geeta
+</span>Enter position: <span class="in">2
+</span>Inserted at position 2
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: Ram -&gt; Geeta -&gt; Shyam -&gt; Mohan -&gt; (back to head)
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">10
+</span>Enter value to search: <span class="in">Shyam
+</span>Found at position 3
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">4
+</span>Deleted: Ram
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">5
+</span>Enter position: <span class="in">2
+</span>Deleted: Shyam
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">6
+</span>Deleted: Mohan
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: Geeta -&gt; (back to head)
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">7
+</span>List is not empty
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">8
+</span>List is not full
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">11
+</span></pre>
+</div>
+<div class="q" id="q7">
+<p class="qtext">7. Implement the operations of doubly linked list storing string values (insert at begin,insert at pos,insert at end,delete at begin,delete at end, delete at pos, isempty, isfull, display, search)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+struct node
+{
+    char data[50];
+    struct node *prev, *next;
+};
+
+struct node *head = NULL;
+
+struct node *createNode(const char *val)
+{
+    struct node *n = (struct node *)malloc(sizeof(struct node));
+    if (n == NULL)
+        return NULL;
+    strcpy(n-&gt;data, val);
+    n-&gt;prev = n-&gt;next = NULL;
+    return n;
+}
+
+int isEmpty()
+{
+    return head == NULL;
+}
+
+int isFull()
+{
+    struct node *t = (struct node *)malloc(sizeof(struct node));
+    if (t == NULL)
+        return 1;
+    free(t);
+    return 0;
+}
+
+int count()
+{
+    int c = 0;
+    struct node *t = head;
+    while (t)
+    {
+        c++;
+        t = t-&gt;next;
+    }
+    return c;
+}
+
+void insertBegin(const char *val)
+{
+    struct node *n;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    n-&gt;next = head;
+    if (head)
+        head-&gt;prev = n;
+    head = n;
+    printf(&quot;Inserted at beginning\n&quot;);
+}
+
+void insertEnd(const char *val)
+{
+    struct node *n, *t;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    if (head == NULL)
+        head = n;
+    else
+    {
+        t = head;
+        while (t-&gt;next)
+            t = t-&gt;next;
+        t-&gt;next = n;
+        n-&gt;prev = t;
+    }
+    printf(&quot;Inserted at end\n&quot;);
+}
+
+void insertPos(const char *val, int pos)
+{
+    struct node *n, *t;
+    int i;
+    if (pos &lt; 1 || pos &gt; count() + 1)
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        insertBegin(val);
+        return;
+    }
+    n = createNode(val);
+    t = head;
+    for (i = 1; i &lt; pos - 1; i++)
+        t = t-&gt;next;
+    n-&gt;next = t-&gt;next;
+    n-&gt;prev = t;
+    if (t-&gt;next)
+        t-&gt;next-&gt;prev = n;
+    t-&gt;next = n;
+    printf(&quot;Inserted at position %d\n&quot;, pos);
+}
+
+void deleteBegin()
+{
+    struct node *t;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    t = head;
+    head = head-&gt;next;
+    if (head)
+        head-&gt;prev = NULL;
+    printf(&quot;Deleted: %s\n&quot;, t-&gt;data);
+    free(t);
+}
+
+void deleteEnd()
+{
+    struct node *t;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    t = head;
+    while (t-&gt;next)
+        t = t-&gt;next;
+    if (t-&gt;prev)
+        t-&gt;prev-&gt;next = NULL;
+    else
+        head = NULL;
+    printf(&quot;Deleted: %s\n&quot;, t-&gt;data);
+    free(t);
+}
+
+void deletePos(int pos)
+{
+    struct node *t;
+    int i;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    if (pos &lt; 1 || pos &gt; count())
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        deleteBegin();
+        return;
+    }
+    t = head;
+    for (i = 1; i &lt; pos; i++)
+        t = t-&gt;next;
+    t-&gt;prev-&gt;next = t-&gt;next;
+    if (t-&gt;next)
+        t-&gt;next-&gt;prev = t-&gt;prev;
+    printf(&quot;Deleted: %s\n&quot;, t-&gt;data);
+    free(t);
+}
+
+void display()
+{
+    struct node *t = head;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty\n&quot;);
+        return;
+    }
+    printf(&quot;List: NULL &lt;-&gt; &quot;);
+    while (t)
+    {
+        printf(&quot;%s &lt;-&gt; &quot;, t-&gt;data);
+        t = t-&gt;next;
+    }
+    printf(&quot;NULL\n&quot;);
+}
+
+void search(const char *val)
+{
+    struct node *t = head;
+    int pos = 1;
+    while (t)
+    {
+        if (strcmp(t-&gt;data, val) == 0)
+        {
+            printf(&quot;Found at position %d\n&quot;, pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    }
+    printf(&quot;Not found\n&quot;);
+}
+
+int main()
+{
+    int ch, pos;
+    char v[50];
+    while (1)
+    {
+        printf(&quot;\n1.Insert at begin\n2.Insert at position\n3.Insert at end\n4.Delete at begin\n5.Delete at position\n6.Delete at end\n7.IsEmpty\n8.IsFull\n9.Display\n10.Search\n11.Exit\nEnter choice: &quot;);
+        if (scanf(&quot;%d&quot;, &amp;ch) != 1)
+            break;
+        switch (ch)
+        {
+            case 1:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                insertBegin(v);
+                break;
+            case 2:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                insertPos(v, pos);
+                break;
+            case 3:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                insertEnd(v);
+                break;
+            case 4:
+                deleteBegin();
+                break;
+            case 5:
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                deletePos(pos);
+                break;
+            case 6:
+                deleteEnd();
+                break;
+            case 7:
+                printf(isEmpty() ? &quot;List is empty\n&quot; : &quot;List is not empty\n&quot;);
+                break;
+            case 8:
+                printf(isFull() ? &quot;List is full\n&quot; : &quot;List is not full\n&quot;);
+                break;
+            case 9:
+                display();
+                break;
+            case 10:
+                printf(&quot;Enter value to search: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                search(v);
+                break;
+            case 11:
+                return 0;
+            default:
+                printf(&quot;Invalid choice\n&quot;);
+        }
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">1
+</span>Enter value: <span class="in">Ram
+</span>Inserted at beginning
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">Shyam
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">Mohan
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">2
+</span>Enter value: <span class="in">Geeta
+</span>Enter position: <span class="in">2
+</span>Inserted at position 2
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: NULL &lt;-&gt; Ram &lt;-&gt; Geeta &lt;-&gt; Shyam &lt;-&gt; Mohan &lt;-&gt; NULL
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">10
+</span>Enter value to search: <span class="in">Shyam
+</span>Found at position 3
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">4
+</span>Deleted: Ram
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">5
+</span>Enter position: <span class="in">2
+</span>Deleted: Shyam
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">6
+</span>Deleted: Mohan
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: NULL &lt;-&gt; Geeta &lt;-&gt; NULL
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">7
+</span>List is not empty
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">8
+</span>List is not full
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">11
+</span></pre>
+</div>
+<div class="q" id="q8">
+<p class="qtext">8. Implement the operations of doubly circular linked list storing string values (insert at begin,insert at pos,insert at end,delete at begin,delete at end, delete at pos, isempty, isfull, display, search)</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+struct node
+{
+    char data[50];
+    struct node *prev, *next;
+};
+
+struct node *head = NULL;
+
+struct node *createNode(const char *val)
+{
+    struct node *n = (struct node *)malloc(sizeof(struct node));
+    if (n == NULL)
+        return NULL;
+    strcpy(n-&gt;data, val);
+    n-&gt;prev = n-&gt;next = n;
+    return n;
+}
+
+int isEmpty()
+{
+    return head == NULL;
+}
+
+int isFull()
+{
+    struct node *t = (struct node *)malloc(sizeof(struct node));
+    if (t == NULL)
+        return 1;
+    free(t);
+    return 0;
+}
+
+int count()
+{
+    int c = 0;
+    struct node *t = head;
+    if (head == NULL)
+        return 0;
+    do
+    {
+        c++;
+        t = t-&gt;next;
+    } while (t != head);
+    return c;
+}
+
+void insertBegin(const char *val)
+{
+    struct node *n, *last;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    if (head == NULL)
+        head = n;
+    else
+    {
+        last = head-&gt;prev;
+        n-&gt;next = head;
+        n-&gt;prev = last;
+        last-&gt;next = n;
+        head-&gt;prev = n;
+        head = n;
+    }
+    printf(&quot;Inserted at beginning\n&quot;);
+}
+
+void insertEnd(const char *val)
+{
+    struct node *n, *last;
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    n = createNode(val);
+    if (head == NULL)
+        head = n;
+    else
+    {
+        last = head-&gt;prev;
+        n-&gt;next = head;
+        n-&gt;prev = last;
+        last-&gt;next = n;
+        head-&gt;prev = n;
+    }
+    printf(&quot;Inserted at end\n&quot;);
+}
+
+void insertPos(const char *val, int pos)
+{
+    struct node *n, *t;
+    int i;
+    if (pos &lt; 1 || pos &gt; count() + 1)
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (isFull())
+    {
+        printf(&quot;List is full (overflow)\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        insertBegin(val);
+        return;
+    }
+    n = createNode(val);
+    t = head;
+    for (i = 1; i &lt; pos - 1; i++)
+        t = t-&gt;next;
+    n-&gt;next = t-&gt;next;
+    n-&gt;prev = t;
+    t-&gt;next-&gt;prev = n;
+    t-&gt;next = n;
+    printf(&quot;Inserted at position %d\n&quot;, pos);
+}
+
+void deleteBegin()
+{
+    struct node *t, *last;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    t = head;
+    printf(&quot;Deleted: %s\n&quot;, t-&gt;data);
+    if (head-&gt;next == head)
+        head = NULL;
+    else
+    {
+        last = head-&gt;prev;
+        head = head-&gt;next;
+        head-&gt;prev = last;
+        last-&gt;next = head;
+    }
+    free(t);
+}
+
+void deleteEnd()
+{
+    struct node *t;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    t = head-&gt;prev;
+    printf(&quot;Deleted: %s\n&quot;, t-&gt;data);
+    if (t == head)
+        head = NULL;
+    else
+    {
+        t-&gt;prev-&gt;next = head;
+        head-&gt;prev = t-&gt;prev;
+    }
+    free(t);
+}
+
+void deletePos(int pos)
+{
+    struct node *t;
+    int i;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty (underflow)\n&quot;);
+        return;
+    }
+    if (pos &lt; 1 || pos &gt; count())
+    {
+        printf(&quot;Invalid position\n&quot;);
+        return;
+    }
+    if (pos == 1)
+    {
+        deleteBegin();
+        return;
+    }
+    t = head;
+    for (i = 1; i &lt; pos; i++)
+        t = t-&gt;next;
+    t-&gt;prev-&gt;next = t-&gt;next;
+    t-&gt;next-&gt;prev = t-&gt;prev;
+    printf(&quot;Deleted: %s\n&quot;, t-&gt;data);
+    free(t);
+}
+
+void display()
+{
+    struct node *t = head;
+    if (isEmpty())
+    {
+        printf(&quot;List is empty\n&quot;);
+        return;
+    }
+    printf(&quot;List: &quot;);
+    do
+    {
+        printf(&quot;%s &lt;-&gt; &quot;, t-&gt;data);
+        t = t-&gt;next;
+    } while (t != head);
+    printf(&quot;(back to head)\n&quot;);
+}
+
+void search(const char *val)
+{
+    struct node *t = head;
+    int pos = 1;
+    if (head == NULL)
+    {
+        printf(&quot;List is empty\n&quot;);
+        return;
+    }
+    do
+    {
+        if (strcmp(t-&gt;data, val) == 0)
+        {
+            printf(&quot;Found at position %d\n&quot;, pos);
+            return;
+        }
+        t = t-&gt;next;
+        pos++;
+    } while (t != head);
+    printf(&quot;Not found\n&quot;);
+}
+
+int main()
+{
+    int ch, pos;
+    char v[50];
+    while (1)
+    {
+        printf(&quot;\n1.Insert at begin\n2.Insert at position\n3.Insert at end\n4.Delete at begin\n5.Delete at position\n6.Delete at end\n7.IsEmpty\n8.IsFull\n9.Display\n10.Search\n11.Exit\nEnter choice: &quot;);
+        if (scanf(&quot;%d&quot;, &amp;ch) != 1)
+            break;
+        switch (ch)
+        {
+            case 1:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                insertBegin(v);
+                break;
+            case 2:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                insertPos(v, pos);
+                break;
+            case 3:
+                printf(&quot;Enter value: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                insertEnd(v);
+                break;
+            case 4:
+                deleteBegin();
+                break;
+            case 5:
+                printf(&quot;Enter position: &quot;);
+                scanf(&quot;%d&quot;, &amp;pos);
+                deletePos(pos);
+                break;
+            case 6:
+                deleteEnd();
+                break;
+            case 7:
+                printf(isEmpty() ? &quot;List is empty\n&quot; : &quot;List is not empty\n&quot;);
+                break;
+            case 8:
+                printf(isFull() ? &quot;List is full\n&quot; : &quot;List is not full\n&quot;);
+                break;
+            case 9:
+                display();
+                break;
+            case 10:
+                printf(&quot;Enter value to search: &quot;);
+                scanf(&quot;%49s&quot;, v);
+                search(v);
+                break;
+            case 11:
+                return 0;
+            default:
+                printf(&quot;Invalid choice\n&quot;);
+        }
+    }
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">1
+</span>Enter value: <span class="in">Ram
+</span>Inserted at beginning
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">Shyam
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">3
+</span>Enter value: <span class="in">Mohan
+</span>Inserted at end
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">2
+</span>Enter value: <span class="in">Geeta
+</span>Enter position: <span class="in">2
+</span>Inserted at position 2
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: Ram &lt;-&gt; Geeta &lt;-&gt; Shyam &lt;-&gt; Mohan &lt;-&gt; (back to head)
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">10
+</span>Enter value to search: <span class="in">Shyam
+</span>Found at position 3
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">4
+</span>Deleted: Ram
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">5
+</span>Enter position: <span class="in">2
+</span>Deleted: Shyam
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">6
+</span>Deleted: Mohan
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">9
+</span>List: Geeta &lt;-&gt; (back to head)
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">7
+</span>List is not empty
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">8
+</span>List is not full
+
+1.Insert at begin
+2.Insert at position
+3.Insert at end
+4.Delete at begin
+5.Delete at position
+6.Delete at end
+7.IsEmpty
+8.IsFull
+9.Display
+10.Search
+11.Exit
+Enter choice: <span class="in">11
+</span></pre>
+</div>
+<div class="q" id="q9">
+<p class="qtext">9. Enter the 2 polynomial equations dynamically, add them and display the answer.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct term
+{
+    int coef, exp;
+    struct term *next;
+};
+
+/* insert term keeping list sorted by exponent (descending); combines equal exponents */
+
+struct term *insertTerm(struct term *head, int coef, int exp)
+{
+    struct term *n, *t = head, *prev = NULL;
+    if (coef == 0)
+        return head;
+    while (t &amp;&amp; t-&gt;exp &gt; exp)
+    {
+        prev = t;
+        t = t-&gt;next;
+    }
+    if (t &amp;&amp; t-&gt;exp == exp)
+    {
+        t-&gt;coef += coef;
+        if (t-&gt;coef == 0)
+        {
+            if (prev)
+                prev-&gt;next = t-&gt;next;
+            else
+                head = t-&gt;next;
+            free(t);
+        }
+        return head;
+    }
+    n = (struct term *)malloc(sizeof(struct term));
+    n-&gt;coef = coef;
+    n-&gt;exp = exp;
+    n-&gt;next = t;
+    if (prev)
+        prev-&gt;next = n;
+    else
+        head = n;
+    return head;
+}
+
+struct term *readPoly(const char *name)
+{
+    int n, i, c, e;
+    struct term *h = NULL;
+    printf(&quot;Enter number of terms in %s: &quot;, name);
+    scanf(&quot;%d&quot;, &amp;n);
+    for (i = 1; i &lt;= n; i++)
+    {
+        printf(&quot;  Term %d - enter coefficient and exponent: &quot;, i);
+        scanf(&quot;%d %d&quot;, &amp;c, &amp;e);
+        h = insertTerm(h, c, e);
+    }
+    return h;
+}
+
+void display(struct term *h)
+{
+    int first = 1, c;
+    if (h == NULL)
+    {
+        printf(&quot;0\n&quot;);
+        return;
+    }
+    for (; h; h = h-&gt;next)
+    {
+        c = h-&gt;coef;
+        if (first)
+        {
+            if (c &lt; 0)
+                printf(&quot;-&quot;);
+        }
+        else
+            printf(c &lt; 0 ? &quot; - &quot; : &quot; + &quot;);
+        if (c &lt; 0)
+            c = -c;
+        if (h-&gt;exp == 0)
+            printf(&quot;%d&quot;, c);
+        else
+        {
+            if (c != 1)
+                printf(&quot;%d&quot;, c);
+            printf(&quot;x&quot;);
+            if (h-&gt;exp != 1)
+                printf(&quot;^%d&quot;, h-&gt;exp);
+        }
+        first = 0;
+    }
+    printf(&quot;\n&quot;);
+}
+
+void freePoly(struct term *h)
+{
+    struct term *t;
+    while (h)
+    {
+        t = h;
+        h = h-&gt;next;
+        free(t);
+    }
+}
+
+struct term *addPoly(struct term *a, struct term *b)
+{
+    struct term *r = NULL;
+    for (; a; a = a-&gt;next)
+        r = insertTerm(r, a-&gt;coef, a-&gt;exp);
+    for (; b; b = b-&gt;next)
+        r = insertTerm(r, b-&gt;coef, b-&gt;exp);
+    return r;
+}
+
+int main()
+{
+    struct term *p1, *p2, *res;
+    p1 = readPoly(&quot;polynomial 1&quot;);
+    p2 = readPoly(&quot;polynomial 2&quot;);
+    printf(&quot;\nPolynomial 1 : &quot;);
+    display(p1);
+    printf(&quot;Polynomial 2 : &quot;);
+    display(p2);
+    res = addPoly(p1, p2);
+    printf(&quot;Sum: &quot;);
+    display(res);
+    freePoly(p1);
+    freePoly(p2);
+    freePoly(res);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter number of terms in polynomial 1: <span class="in">3
+</span>  Term 1 - enter coefficient and exponent: <span class="in">5 3
+</span>  Term 2 - enter coefficient and exponent: <span class="in">4 2
+</span>  Term 3 - enter coefficient and exponent: <span class="in">6 0
+</span>Enter number of terms in polynomial 2: <span class="in">3
+</span>  Term 1 - enter coefficient and exponent: <span class="in">3 3
+</span>  Term 2 - enter coefficient and exponent: <span class="in">2 1
+</span>  Term 3 - enter coefficient and exponent: <span class="in">4 0
+</span>
+Polynomial 1 : 5x^3 + 4x^2 + 6
+Polynomial 2 : 3x^3 + 2x + 4
+Sum: 8x^3 + 4x^2 + 2x + 10</pre>
+</div>
+<div class="q" id="q10">
+<p class="qtext">10. Enter the 2 polynomial equations dynamically, subtract them and display the answer.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct term
+{
+    int coef, exp;
+    struct term *next;
+};
+
+/* insert term keeping list sorted by exponent (descending); combines equal exponents */
+
+struct term *insertTerm(struct term *head, int coef, int exp)
+{
+    struct term *n, *t = head, *prev = NULL;
+    if (coef == 0)
+        return head;
+    while (t &amp;&amp; t-&gt;exp &gt; exp)
+    {
+        prev = t;
+        t = t-&gt;next;
+    }
+    if (t &amp;&amp; t-&gt;exp == exp)
+    {
+        t-&gt;coef += coef;
+        if (t-&gt;coef == 0)
+        {
+            if (prev)
+                prev-&gt;next = t-&gt;next;
+            else
+                head = t-&gt;next;
+            free(t);
+        }
+        return head;
+    }
+    n = (struct term *)malloc(sizeof(struct term));
+    n-&gt;coef = coef;
+    n-&gt;exp = exp;
+    n-&gt;next = t;
+    if (prev)
+        prev-&gt;next = n;
+    else
+        head = n;
+    return head;
+}
+
+struct term *readPoly(const char *name)
+{
+    int n, i, c, e;
+    struct term *h = NULL;
+    printf(&quot;Enter number of terms in %s: &quot;, name);
+    scanf(&quot;%d&quot;, &amp;n);
+    for (i = 1; i &lt;= n; i++)
+    {
+        printf(&quot;  Term %d - enter coefficient and exponent: &quot;, i);
+        scanf(&quot;%d %d&quot;, &amp;c, &amp;e);
+        h = insertTerm(h, c, e);
+    }
+    return h;
+}
+
+void display(struct term *h)
+{
+    int first = 1, c;
+    if (h == NULL)
+    {
+        printf(&quot;0\n&quot;);
+        return;
+    }
+    for (; h; h = h-&gt;next)
+    {
+        c = h-&gt;coef;
+        if (first)
+        {
+            if (c &lt; 0)
+                printf(&quot;-&quot;);
+        }
+        else
+            printf(c &lt; 0 ? &quot; - &quot; : &quot; + &quot;);
+        if (c &lt; 0)
+            c = -c;
+        if (h-&gt;exp == 0)
+            printf(&quot;%d&quot;, c);
+        else
+        {
+            if (c != 1)
+                printf(&quot;%d&quot;, c);
+            printf(&quot;x&quot;);
+            if (h-&gt;exp != 1)
+                printf(&quot;^%d&quot;, h-&gt;exp);
+        }
+        first = 0;
+    }
+    printf(&quot;\n&quot;);
+}
+
+void freePoly(struct term *h)
+{
+    struct term *t;
+    while (h)
+    {
+        t = h;
+        h = h-&gt;next;
+        free(t);
+    }
+}
+
+struct term *subPoly(struct term *a, struct term *b)
+{
+    struct term *r = NULL;
+    for (; a; a = a-&gt;next)
+        r = insertTerm(r, a-&gt;coef, a-&gt;exp);
+    for (; b; b = b-&gt;next)
+        r = insertTerm(r, -b-&gt;coef, b-&gt;exp);
+    return r;
+}
+
+int main()
+{
+    struct term *p1, *p2, *res;
+    p1 = readPoly(&quot;polynomial 1&quot;);
+    p2 = readPoly(&quot;polynomial 2&quot;);
+    printf(&quot;\nPolynomial 1 : &quot;);
+    display(p1);
+    printf(&quot;Polynomial 2 : &quot;);
+    display(p2);
+    res = subPoly(p1, p2);
+    printf(&quot;Difference   : &quot;);
+    display(res);
+    freePoly(p1);
+    freePoly(p2);
+    freePoly(res);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter number of terms in polynomial 1: <span class="in">3
+</span>  Term 1 - enter coefficient and exponent: <span class="in">5 3
+</span>  Term 2 - enter coefficient and exponent: <span class="in">4 2
+</span>  Term 3 - enter coefficient and exponent: <span class="in">6 0
+</span>Enter number of terms in polynomial 2: <span class="in">3
+</span>  Term 1 - enter coefficient and exponent: <span class="in">3 3
+</span>  Term 2 - enter coefficient and exponent: <span class="in">2 1
+</span>  Term 3 - enter coefficient and exponent: <span class="in">4 0
+</span>
+Polynomial 1 : 5x^3 + 4x^2 + 6
+Polynomial 2 : 3x^3 + 2x + 4
+Difference   : 2x^3 + 4x^2 - 2x + 2</pre>
+</div>
+<div class="q" id="q11">
+<p class="qtext">11. Enter the 2 polynomial equations dynamically, multiply them and display the answer.</p>
+<h3>Code:</h3>
+<div class="wrap"><pre class="code"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct term
+{
+    int cof, exp;
+    struct term *next;
+};
+
+/* insert term keeping list sorted by exponent (descending); combines equal exponents */
+
+struct term *insertTerm(struct term *head, int cof, int exp)
+{
+    struct term *n, *t = head, *prev = NULL;
+    if (cof == 0)
+        return head;
+    while (t &amp;&amp; t-&gt;exp &gt; exp)
+    {
+        prev = t;
+        t = t-&gt;next;
+    }
+    if (t &amp;&amp; t-&gt;exp == exp)
+    {
+        t-&gt;cof += cof;
+        if (t-&gt;cof == 0)
+        {
+            if (prev)
+                prev-&gt;next = t-&gt;next;
+            else
+                head = t-&gt;next;
+            free(t);
+        }
+        return head;
+    }
+    n = (struct term *)malloc(sizeof(struct term));
+    n-&gt;cof = cof;
+    n-&gt;exp = exp;
+    n-&gt;next = t;
+    if (prev)
+        prev-&gt;next = n;
+    else
+        head = n;
+    return head;
+}
+
+struct term *readPoly(const char *name)
+{
+    int n, i, c, e;
+    struct term *h = NULL;
+    printf(&quot;Enter number of terms in %s: &quot;, name);
+    scanf(&quot;%d&quot;, &amp;n);
+    for (i = 1; i &lt;= n; i++)
+    {
+        printf(&quot;  Term %d - enter coefficient and exponent: &quot;, i);
+        scanf(&quot;%d %d&quot;, &amp;c, &amp;e);
+        h = insertTerm(h, c, e);
+    }
+    return h;
+}
+
+void display(struct term *h)
+{
+    int first = 1, c;
+    if (h == NULL)
+    {
+        printf(&quot;0\n&quot;);
+        return;
+    }
+    for (; h; h = h-&gt;next)
+    {
+        c = h-&gt;cof;
+        if (first)
+        {
+            if (c &lt; 0)
+                printf(&quot;-&quot;);
+        }
+        else
+            printf(c &lt; 0 ? &quot; - &quot; : &quot; + &quot;);
+        if (c &lt; 0)
+            c = -c;
+        if (h-&gt;exp == 0)
+            printf(&quot;%d&quot;, c);
+        else
+        {
+            if (c != 1)
+                printf(&quot;%d&quot;, c);
+            printf(&quot;x&quot;);
+            if (h-&gt;exp != 1)
+                printf(&quot;^%d&quot;, h-&gt;exp);
+        }
+        first = 0;
+    }
+    printf(&quot;\n&quot;);
+}
+
+void freePoly(struct term *h)
+{
+    struct term *t;
+    while (h)
+    {
+        t = h;
+        h = h-&gt;next;
+        free(t);
+    }
+}
+
+struct term *mulPoly(struct term *a, struct term *b)
+{
+    struct term *r = NULL, *q;
+    for (; a; a = a-&gt;next)
+        for (q = b; q; q = q-&gt;next)
+            r = insertTerm(r, a-&gt;cof * q-&gt;cof, a-&gt;exp + q-&gt;exp);
+    return r;
+}
+
+int main()
+{
+    struct term *p1, *p2, *res;
+    p1 = readPoly(&quot;polynomial 1&quot;);
+    p2 = readPoly(&quot;polynomial 2&quot;);
+    printf(&quot;\nPolynomial 1 : &quot;);
+    display(p1);
+    printf(&quot;Polynomial 2 : &quot;);
+    display(p2);
+    res = mulPoly(p1, p2);
+    printf(&quot;Product      : &quot;);
+    display(res);
+    freePoly(p1);
+    freePoly(p2);
+    freePoly(res);
+    return 0;
+}</code></pre></div>
+<h3>Output:</h3>
+<pre class="out">Enter number of terms in polynomial 1: <span class="in">3
+</span>  Term 1 - enter coefficient and exponent: <span class="in">5 3
+</span>  Term 2 - enter coefficient and exponent: <span class="in">4 2
+</span>  Term 3 - enter coefficient and exponent: <span class="in">6 0
+</span>Enter number of terms in polynomial 2: <span class="in">3
+</span>  Term 1 - enter coefficient and exponent: <span class="in">3 3
+</span>  Term 2 - enter coefficient and exponent: <span class="in">2 1
+</span>  Term 3 - enter coefficient and exponent: <span class="in">4 0
+</span>
+Polynomial 1 : 5x^3 + 4x^2 + 6
+Polynomial 2 : 3x^3 + 2x + 4
+Product      : 15x^6 + 12x^5 + 10x^4 + 46x^3 + 16x^2 + 12x + 24</pre>
+</div>
+</div>
+<footer>My Data Structures Website</footer>
+</body></html>
